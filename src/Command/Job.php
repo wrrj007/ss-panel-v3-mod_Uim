@@ -27,6 +27,11 @@ use App\Utils\Telegram;
 use ArrayObject;
 use App\Models\Disconnect;
 use App\Models\UnblockIp;
+use App\Models\UserSubscribeLog;
+use App\Models\DetectBanLog;
+use App\Models\TelegramTasks;
+use App\Models\Token;
+use App\Models\GConfig;
 use Exception;
 use RuntimeException;
 
@@ -119,7 +124,7 @@ class Job
         $nodes = Node::all();
         foreach ($nodes as $node) {
             $rule = preg_match("/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/", $node->server);
-            if (!$rule && (!$node->sort || $node->sort == 10 || $node->sort == 12 || $node->sort == 13)) {
+            if (!$rule && (in_array($node->sort, array(0, 10, 12, 13)))) {
                 $ip = gethostbyname($node->server);
                 $node->node_ip = $ip;
                 $node->save();
@@ -134,13 +139,18 @@ class Job
         ini_set('memory_limit', '-1');
         $nodes = Node::all();
         foreach ($nodes as $node) {
-            if ($node->sort == 0 || $node->sort == 10 || $node->sort == 11 || $node->sort == 12 || $node->sort == 13) {
+            if (in_array($node->sort, array(0, 10, 11, 12, 13))) {
                 if (date('d') == $node->bandwidthlimit_resetday) {
                     $node->node_bandwidth = 0;
                     $node->save();
                 }
             }
         }
+
+        // 清理订阅记录
+        UserSubscribeLog::where('request_time', '<', date('Y-m-d H:i:s', time() - 86400 * (int) $_ENV['subscribeLog_keep_days']))->delete();
+
+        Token::where('expire_time', '<', time())->delete();
 
         NodeInfoLog::where('log_time', '<', time() - 86400 * 3)->delete();
         NodeOnlineLog::where('log_time', '<', time() - 86400 * 3)->delete();
@@ -149,7 +159,10 @@ class Job
         Speedtest::where('datetime', '<', time() - 86400 * 3)->delete();
         EmailVerify::where('expire_in', '<', time() - 86400 * 3)->delete();
         system('rm ' . BASE_PATH . '/storage/*.png', $ret);
-        Telegram::Send('姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~');
+
+        if (Config::getdb('Telegram.enable.DailyJob') !== '0') {
+            Telegram::Send(Config::getdb('Telegram.msg.DailyJob'));
+        }
 
         //auto reset
         $boughts = Bought::all();
@@ -253,7 +266,6 @@ class Job
     {
         system('cd ' . BASE_PATH . '/public/ssr-download/ && git pull https://github.com/xcxnig/ssr-download.git && git gc');
     }
-
 
     public static function CheckJob()
     {
@@ -468,10 +480,16 @@ class Job
                             echo $e->getMessage();
                         }
 
-                        $notice_text = '喵喵喵~ ' . $node->name . ' 节点掉线了喵~';
+                        $notice_text = str_replace(
+                            '%node_name%',
+                            $node->name,
+                            Config::getdb('Telegram.msg.NodeOffline')
+                        );
                     }
 
-                    Telegram::Send($notice_text);
+                    if (Config::getdb('Telegram.enable.NodeOffline') !== '0') {
+                        Telegram::Send($notice_text);
+                    }
 
                     $node->online = false;
                     $node->save();
@@ -511,10 +529,17 @@ class Job
                             echo $e->getMessage();
                         }
 
-                        $notice_text = '喵喵喵~ ' . $node->name . ' 节点恢复了喵~';
+                        $notice_text = str_replace(
+                            '%node_name%',
+                            $node->name,
+                            Config::getdb('Telegram.msg.NodeOnline')
+                        );
                     }
 
-                    Telegram::Send($notice_text);
+                    if (Config::getdb('Telegram.enable.NodeOnline') !== '0') {
+                        Telegram::Send($notice_text);
+                    }
+
                     $node->online = true;
                     $node->save();
                 }
@@ -742,6 +767,16 @@ class Job
                 $user->class = 0;
             }
 
+            // 审计封禁解封
+            if ($user->enable == 0) {
+                $logs = DetectBanLog::where('user_id', $user->id)->orderBy('id', 'desc')->first();
+                if ($logs != null) {
+                    if (($logs->end_time + $logs->ban_time * 60) <= time()) {
+                        $user->enable = 1;
+                    }
+                }
+            }
+
             $user->save();
         }
 
@@ -758,6 +793,20 @@ class Job
                 $sinuser->delete();
                 Radius::Add($user, $user->passwd);
             }
+        }
+
+        if ($_ENV['enable_telegram'] === true) {
+            # 删除 tg 消息
+            $TelegramTasks = TelegramTasks::where('type', 1)->where('executetime', '<', time())->get();
+            foreach ($TelegramTasks as $Task) {
+                \App\Utils\Telegram\TelegramTools::SendPost('deleteMessage', ['chat_id' => $Task->chatid, 'message_id' => $Task->messageid]);
+                TelegramTasks::where('chatid', $Task->chatid)->where('type', '<>', 1)->where('messageid', $Task->messageid)->delete();
+                $Task->delete();
+            }
+        }
+
+        if ($_ENV['enable_auto_detect_ban'] === true) {
+            self::DetectBan();
         }
     }
 
@@ -815,9 +864,15 @@ class Job
                             } catch (Exception $e) {
                                 echo $e->getMessage();
                             }
-                            $notice_text = '喵喵喵~ ' . $node->name . ' 节点被墙了喵~';
+                            $notice_text = str_replace(
+                                '%node_name%',
+                                $node->name,
+                                Config::getdb('Telegram.msg.NodeGFW')
+                            );
                         }
-                        Telegram::Send($notice_text);
+                        if (Config::getdb('Telegram.enable.NodeGFW') !== '0') {
+                            Telegram::Send($notice_text);
+                        }
                         $node->gfw_block = true;
                         $node->save();
                     } else {
@@ -840,9 +895,15 @@ class Job
                             } catch (Exception $e) {
                                 echo $e->getMessage();
                             }
-                            $notice_text = '喵喵喵~ ' . $node->name . ' 节点恢复了喵~';
+                            $notice_text = str_replace(
+                                '%node_name%',
+                                $node->name,
+                                Config::getdb('Telegram.msg.NodeGFW_recover')
+                            );
                         }
-                        Telegram::Send($notice_text);
+                        if (Config::getdb('Telegram.enable.NodeGFW_recover') !== '0') {
+                            Telegram::Send($notice_text);
+                        }
                         $node->gfw_block = false;
                         $node->save();
                     }
@@ -853,5 +914,89 @@ class Job
             echo($node->id . 'interval skip' . PHP_EOL);
             sleep(3);
         }
+    }
+
+    public static function DetectBan()
+    {
+        echo '审计封禁检查开始.';
+        $last_id = (int) Config::getdb('get.Detect.Log');
+        $new_logs = DetectLog::where('id', '>', $last_id)->orderBy('id', 'desc')->get();
+        if (count($new_logs) != 0) {
+            $Config = GConfig::find('get.Detect.Log');
+            $Config->value = $new_logs[0]->id;
+            $Config->save();
+            $user_logs = [];
+            foreach ($new_logs as $log) {
+                if (!in_array($log->user_id, array_keys($user_logs))) {
+                    $user_logs[$log->user_id] = 0;
+                }
+                $user_logs[$log->user_id]++;
+            }
+            foreach ($user_logs as $userid => $value) {
+                $user = User::find($userid);
+                if ($user == null) {
+                    continue;
+                }
+                $user->all_detect_number += $value;
+                $user->save();
+                if ($user->enable == 0 || ($user->is_admin && $_ENV['auto_detect_ban_allow_admin'] === true) || in_array($user->id, $_ENV['auto_detect_ban_allow_users'])) {
+                    continue;
+                }
+                if ($_ENV['auto_detect_ban_type'] == 1) {
+                    $last_DetectBanLog      = DetectBanLog::where('user_id', $userid)->orderBy('id', 'desc')->first();
+                    $last_all_detect_number = ($last_DetectBanLog == null ? 0 : (int) $last_DetectBanLog->all_detect_number);
+                    $detect_number          = ($user->all_detect_number - $last_all_detect_number);
+                    if ($detect_number >= $_ENV['auto_detect_ban_number']) {
+                        $last_detect_ban_time               = $user->last_detect_ban_time;
+                        $end_time                           = date('Y-m-d H:i:s');
+                        $user->enable                       = 0;
+                        $user->last_detect_ban_time         = $end_time;
+                        $user->save();
+                        $DetectBanLog                       = new DetectBanLog();
+                        $DetectBanLog->user_name            = $user->user_name;
+                        $DetectBanLog->user_id              = $user->id;
+                        $DetectBanLog->email                = $user->email;
+                        $DetectBanLog->detect_number        = $detect_number;
+                        $DetectBanLog->ban_time             = $_ENV['auto_detect_ban_time'];
+                        $DetectBanLog->start_time           = strtotime($last_detect_ban_time);
+                        $DetectBanLog->end_time             = strtotime($end_time);
+                        $DetectBanLog->all_detect_number    = $user->all_detect_number;
+                        $DetectBanLog->save();
+                    }
+                } else {
+                    $number = $user->all_detect_number;
+                    $tmp = 0;
+                    foreach ($_ENV['auto_detect_ban'] as $key => $value) {
+                        if ($number >= $key) {
+                            if ($key >= $tmp) {
+                                $tmp = $key;
+                            }
+                        }
+                    }
+                    if ($tmp != 0) {
+                        if ($_ENV['auto_detect_ban'][$tmp]['type'] == 'kill') {
+                            $user->kill_user();
+                        } else {
+                            $last_detect_ban_time               = $user->last_detect_ban_time;
+                            $end_time                           = date('Y-m-d H:i:s');
+                            $user->enable                       = 0;
+                            $user->last_detect_ban_time         = $end_time;
+                            $user->save();
+                            $DetectBanLog                       = new DetectBanLog();
+                            $DetectBanLog->user_name            = $user->user_name;
+                            $DetectBanLog->user_id              = $user->id;
+                            $DetectBanLog->email                = $user->email;
+                            $DetectBanLog->detect_number        = $number;
+                            $DetectBanLog->ban_time             = $_ENV['auto_detect_ban'][$tmp]['time'];
+                            $DetectBanLog->start_time           = strtotime('1989-06-04 00:05:00');
+                            $DetectBanLog->end_time             = strtotime($end_time);
+                            $DetectBanLog->all_detect_number    = $number;
+                            $DetectBanLog->save();
+                        }
+                    }
+                }
+            }
+        }
+        echo '审计封禁检查结束.';
     }
 }

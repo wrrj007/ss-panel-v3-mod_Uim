@@ -2,21 +2,23 @@
 
 namespace App\Controllers;
 
-use App\Models\InviteCode;
-use App\Models\User;
-use App\Models\Code;
-use App\Models\Payback;
-use App\Models\Ann;
-use App\Models\Shop;
+use App\Models\{
+    Ann,
+    Code,
+    Node,
+    User,
+    Shop,
+    Relay,
+    Payback,
+    InviteCode
+};
+use App\Utils\{
+    URL,
+    Tools,
+    Geetest,
+    TelegramSessionManager
+};
 use App\Services\Auth;
-use App\Services\Config;
-use App\Utils\Tools;
-use App\Utils\TelegramSessionManager;
-use App\Utils\Geetest;
-
-use App\Utils\URL;
-use App\Models\Node;
-use App\Models\Relay;
 use Slim\Http\{Request, Response};
 use Psr\Http\Message\ResponseInterface;
 
@@ -411,8 +413,8 @@ class VueController extends BaseController
                 $array_node['latest_load'] = -1;
             }
 
-            $array_node['traffic_used'] = (int)Tools::flowToGB($node->node_bandwidth);
-            $array_node['traffic_limit'] = (int)Tools::flowToGB($node->node_bandwidth_limit);
+            $array_node['traffic_used'] = (int) Tools::flowToGB($node->node_bandwidth);
+            $array_node['traffic_limit'] = (int) Tools::flowToGB($node->node_bandwidth_limit);
             if ($node->node_speedlimit == 0.0) {
                 $array_node['bandwidth'] = 0;
             } elseif ($node->node_speedlimit >= 1024.00) {
@@ -475,7 +477,8 @@ class VueController extends BaseController
                 }
                 break;
             case 1:
-                if ($user->class >= $node->node_class
+                if (
+                    $user->class >= $node->node_class
                     && ($user->node_group == $node->node_group || $node->node_group == 0)
                 ) {
                     $email = $user->email;
@@ -490,8 +493,10 @@ class VueController extends BaseController
                 }
                 break;
             case 2:
-                if ($user->class >= $node->node_class
-                    && ($user->node_group == $node->node_group || $node->node_group == 0)) {
+                if (
+                    $user->class >= $node->node_class
+                    && ($user->node_group == $node->node_group || $node->node_group == 0)
+                ) {
                     $email = $user->email;
                     $email = Radius::GetUserName($email);
                     $json_show = 'SSH 信息<br>地址：' . $node->server
@@ -504,8 +509,10 @@ class VueController extends BaseController
                 }
                 break;
             case 5:
-                if ($user->class >= $node->node_class
-                    && ($user->node_group == $node->node_group || $node->node_group == 0)) {
+                if (
+                    $user->class >= $node->node_class
+                    && ($user->node_group == $node->node_group || $node->node_group == 0)
+                ) {
                     $email = $user->email;
                     $email = Radius::GetUserName($email);
 
@@ -521,7 +528,8 @@ class VueController extends BaseController
             case 10:
                 if ((($user->class >= $node->node_class
                         && ($user->node_group == $node->node_group || $node->node_group == 0)) || $user->is_admin)
-                    && ($node->node_bandwidth_limit == 0 || $node->node_bandwidth < $node->node_bandwidth_limit)) {
+                    && ($node->node_bandwidth_limit == 0 || $node->node_bandwidth < $node->node_bandwidth_limit)
+                ) {
                     return $response->withJson([
                         'ret' => 1,
                         'nodeInfo' => [
@@ -537,7 +545,8 @@ class VueController extends BaseController
             case 13:
                 if ((($user->class >= $node->node_class
                         && ($user->node_group == $node->node_group || $node->node_group == 0)) || $user->is_admin)
-                    && ($node->node_bandwidth_limit == 0 || $node->node_bandwidth < $node->node_bandwidth_limit)) {
+                    && ($node->node_bandwidth_limit == 0 || $node->node_bandwidth < $node->node_bandwidth_limit)
+                ) {
                     return $response->withJson([
                         'ret' => 1,
                         'nodeInfo' => [

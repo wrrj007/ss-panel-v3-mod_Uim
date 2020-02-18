@@ -2,10 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Models\User;
-use App\Models\PasswordReset;
-use App\Services\Password;
+use App\Models\{
+    User,
+    PasswordReset
+};
 use App\Utils\Hash;
+use App\Services\Password;
 
 /***
  * Class Password

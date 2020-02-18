@@ -2,23 +2,27 @@
 
 namespace App\Controllers;
 
-use App\Models\InviteCode;
-use App\Services\Config;
-use App\Utils\Check;
-use App\Utils\Tools;
-use App\Utils\Radius;
-use Exception;
+use App\Models\{
+    User,
+    LoginIp,
+    InviteCode,
+    EmailVerify
+};
+use App\Utils\{
+    GA,
+    Hash,
+    Check,
+    Tools,
+    Radius,
+    Geetest,
+    TelegramSessionManager
+};
+use App\Services\{
+    Auth,
+    Mail
+};
 use voku\helper\AntiXSS;
-use App\Utils\Hash;
-use App\Utils\Da;
-use App\Services\Auth;
-use App\Services\Mail;
-use App\Models\User;
-use App\Models\LoginIp;
-use App\Models\EmailVerify;
-use App\Utils\GA;
-use App\Utils\Geetest;
-use App\Utils\TelegramSessionManager;
+use Exception;
 
 /**
  *  AuthController
@@ -252,7 +256,6 @@ class AuthController extends BaseController
             ->display('auth/register.tpl');
     }
 
-
     public function sendVerify($request, $response, $next)
     {
         if ($_ENV['enable_email_verify'] == true) {
@@ -280,7 +283,7 @@ class AuthController extends BaseController
             }
 
             $ipcount = EmailVerify::where('ip', '=', $_SERVER['REMOTE_ADDR'])->where('expire_in', '>', time())->count();
-            if ($ipcount >= (int)$_ENV['email_verify_iplimit']) {
+            if ($ipcount >= (int) $_ENV['email_verify_iplimit']) {
                 $res['ret'] = 0;
                 $res['msg'] = '此IP请求次数过多';
                 return $response->getBody()->write(json_encode($res));
@@ -400,7 +403,7 @@ class AuthController extends BaseController
             --$gift_user->invite_num;
             $gift_user->save();
         }
-        if ( $telegram_id ) {
+        if ($telegram_id) {
             $user->telegram_id = $telegram_id;
         }
 

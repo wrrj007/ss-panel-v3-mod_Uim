@@ -11,7 +11,7 @@
     } </script>
 
 {function displayV2rayNode node=null}
-    {$v2server=URL::getV2Url($user, $node['raw_node'], 1)}
+    {$v2server=URL::getV2Url($user, $node['raw_node'], true)}
     <p>地址：<span class="card-tag tag-blue">{$v2server['add']}</span></p>
     <p>端口：<span class="card-tag tag-volcano">{$v2server['port']}</span></p>
     <p>AlterId：<span class="card-tag tag-purple">{$v2server['aid']}</span></p>

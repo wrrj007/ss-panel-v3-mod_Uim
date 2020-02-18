@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * SSPanel-Uim Public Entrance File
@@ -13,6 +14,7 @@ require __DIR__ . '/../app/predefine.php';
 
 // TODO: legacy boot function
 use App\Services\Boot;
+
 Boot::setTime();
 Boot::bootDb();
 

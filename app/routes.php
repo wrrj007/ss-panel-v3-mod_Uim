@@ -1,27 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 use Slim\App as SlimApp;
-use App\Middleware\Auth;
-use App\Middleware\Guest;
-use App\Middleware\Admin;
-use App\Middleware\Mod_Mu;
+use App\Middleware\{Auth, Guest, Admin, Mod_Mu};
 
 return function (SlimApp $app) {
     // Home
-    $app->post('/spay_back', App\Services\Payment::class . ':notify');
-    $app->get('/spay_back', App\Services\Payment::class . ':notify');
     $app->get('/', App\Controllers\HomeController::class . ':index');
-    $app->get('/indexold', App\Controllers\HomeController::class . ':indexold');
     $app->get('/404', App\Controllers\HomeController::class . ':page404');
     $app->get('/405', App\Controllers\HomeController::class . ':page405');
     $app->get('/500', App\Controllers\HomeController::class . ':page500');
-    $app->post('/notify', App\Controllers\HomeController::class . ':notify');
     $app->get('/tos', App\Controllers\HomeController::class . ':tos');
     $app->get('/staff', App\Controllers\HomeController::class . ':staff');
-    $app->post('/telegram_callback', App\Controllers\HomeController::class . ':telegram');
-    $app->post('/tomato_back/{type}', App\Services\Payment::class . ':notify');
+    $app->get('/indexold', App\Controllers\HomeController::class . ':indexold');
+
+    // other
+    $app->get('/spay_back', App\Services\Payment::class . ':notify');
+    $app->post('/spay_back', App\Services\Payment::class . ':notify');
+    $app->post('/notify', App\Controllers\HomeController::class . ':notify');
     $app->get('/tomato_back/{type}', App\Services\Payment::class . ':notify');
+    $app->post('/tomato_back/{type}', App\Services\Payment::class . ':notify');
+
+    // New Telegram
+    $app->post('/TelegramCallback', App\Controllers\HomeController::class . ':NewTelegram');
+    // Old Telegram
+    $app->post('/telegram_callback', App\Controllers\HomeController::class . ':telegram');
 
     // User Center
     $app->group('/user', function () {
@@ -106,6 +110,12 @@ return function (SlimApp $app) {
         // Crypto Payment - BTC, ETH, EOS, BCH, LTC etch
         $this->post('/payment/bitpay/purchase', App\Services\BitPayment::class . ':purchase');
         $this->get('/payment/bitpay/return', App\Services\BitPayment::class . ':returnHTML');
+
+        // 订阅记录
+        $this->get('/subscribe_log', App\Controllers\UserController::class . ':subscribe_log');
+
+        // getUserAllURL
+        $this->get('/getUserAllURL', App\Controllers\UserController::class . ':getUserAllURL');
 
         // getPcClient
         $this->get('/getPcClient', App\Controllers\UserController::class . ':getPcClient');
@@ -257,6 +267,28 @@ return function (SlimApp $app) {
         $this->get('/sys', App\Controllers\AdminController::class . ':sys');
         $this->get('/logout', App\Controllers\AdminController::class . ':logout');
         $this->post('/payback/ajax', App\Controllers\AdminController::class . ':ajax_payback');
+
+        // Subscribe Log Mange
+        $this->get('/subscribe', App\Controllers\Admin\SubscribeLogController::class . ':index');
+        $this->post('/subscribe/ajax', App\Controllers\Admin\SubscribeLogController::class . ':ajax_subscribe_log');
+
+        // Detect Ban Mange
+        $this->get('/detect/ban', App\Controllers\Admin\DetectBanLogController::class . ':index');
+        $this->post('/detect/ban/ajax', App\Controllers\Admin\DetectBanLogController::class . ':ajax_log');
+
+        // 单用户购记录以及添加套餐
+        $this->get('/user/{id}/bought', App\Controllers\Admin\UserController::class . ':bought');
+        $this->post('/user/{id}/bought/ajax', App\Controllers\Admin\UserController::class . ':bought_ajax');
+        $this->delete('/user/bought', App\Controllers\Admin\UserController::class . ':bought_delete');
+        $this->post('/user/{id}/bought/buy', App\Controllers\Admin\UserController::class . ':bought_add');
+
+        // Config Mange
+        $this->group('/config', function () {
+            $this->get('/telegram', App\Controllers\Admin\GConfigController::class . ':telegram');
+            $this->post('/telegram/ajax', App\Controllers\Admin\GConfigController::class . ':telegram_ajax');
+            $this->get('/telegram/{key}/edit', App\Controllers\Admin\GConfigController::class . ':telegram_edit');
+            $this->put('/telegram/{key}', App\Controllers\Admin\GConfigController::class . ':telegram_update');
+        });
     })->add(new Admin());
 
     // mu
@@ -289,7 +321,6 @@ return function (SlimApp $app) {
         $this->get('/captcha/{id}', App\Controllers\ResController::class . ':captcha');
     });
 
-
     $app->group('/link', function () {
         $this->get('/{token}', App\Controllers\LinkController::class . ':GetContent');
     });
@@ -297,6 +328,7 @@ return function (SlimApp $app) {
     $app->group('/user', function () {
         $this->post('/doiam', App\Services\Payment::class . ':purchase');
     })->add(new Auth());
+
     $app->group('/doiam', function () {
         $this->post('/callback/{type}', App\Services\Payment::class . ':notify');
         $this->get('/return/alipay', App\Services\Payment::class . ':returnHTML');
@@ -304,7 +336,6 @@ return function (SlimApp $app) {
     });
 
     // Vue
-
     $app->get('/logout', App\Controllers\VueController::class . ':vuelogout');
     $app->get('/globalconfig', App\Controllers\VueController::class . ':getGlobalConfig');
     $app->get('/getuserinfo', App\Controllers\VueController::class . ':getUserInfo');
@@ -334,4 +365,16 @@ return function (SlimApp $app) {
         $this->post('/saveConfig', App\Controllers\AdminController::class . ':saveConfig');
     })->add(new Admin());
     // chenPay end
+
+    //doc
+    $app->group('/doc', function () {
+        $this->get('', App\Controllers\HomeController::class . ':getDocCenter');
+        $this->get('/', App\Controllers\HomeController::class . ':getDocCenter');
+    });
+    $app->get('/sublink', App\Controllers\HomeController::class . ':getSubLink');
+    //doc end
+
+    $app->group('/getClient', function () {
+        $this->get('/{token}', App\Controllers\UserController::class . ':getClientfromToken');
+    });
 };
