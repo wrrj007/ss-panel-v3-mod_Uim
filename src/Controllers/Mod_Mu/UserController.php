@@ -50,6 +50,7 @@ class UserController extends BaseController
 
         if (in_array($node->sort, [0, 10]) && $node->mu_only != -1) {
             $mu_port_migration = $_ENV['mu_port_migration'];
+            $muPort = Tools::get_MuOutPortArray($node->server);
         } else {
             $mu_port_migration = false;
         }
@@ -59,73 +60,20 @@ class UserController extends BaseController
          * 2. 请不要把真实用户作为单端口承载用户
          */
         $users_raw = User::where(
-            static function ($query) use ($node, $mu_port_migration) {
-                if ($mu_port_migration === true) {
-                    $query->where(
-                        static function ($query1) use ($node) {
-                            if ($node->node_group != 0) {
-                                $query1->where('class', '>=', $node->node_class)
-                                    ->where('node_group', '=', $node->node_group)
-                                    ->where('is_multi_user', '=', 0)
-                                    ->where('is_admin', 0);
-                            } else {
-                                $query1->where('class', '>=', $node->node_class)
-                                    ->where('is_multi_user', '=', 0)
-                                    ->where('is_admin', 0);
-                            }
+            static function ($query) use ($node) {
+                $query->where(
+                    static function ($query1) use ($node) {
+                        if ($node->node_group != 0) {
+                            $query1->where('class', '>=', $node->node_class)
+                                ->where('node_group', '=', $node->node_group);
+                        } else {
+                            $query1->where('class', '>=', $node->node_class);
                         }
-                    );
-                } else {
-                    $query->where(
-                        static function ($query1) use ($node) {
-                            if ($node->node_group != 0) {
-                                $query1->where('class', '>=', $node->node_class)
-                                    ->where('node_group', '=', $node->node_group);
-                            } else {
-                                $query1->where('class', '>=', $node->node_class);
-                            }
-                        }
-                    )->orwhere('is_admin', 1);
-                }
-            }
-        )->where('enable', 1)->where('expire_in', '>', date('Y-m-d H:i:s'))->get();
-
-        // 单端口承载用户
-        if ($mu_port_migration === true) {
-            $mu_users_raw = User::where(
-                static function ($query) use ($node) {
-                    $query->where(
-                        static function ($query1) use ($node) {
-                            if ($node->node_group != 0) {
-                                $query1->where('class', '>=', $node->node_class)
-                                    ->where('node_group', '=', $node->node_group)
-                                    ->where('is_multi_user', '>', 0);
-                            } else {
-                                $query1->where('class', '>=', $node->node_class)
-                                    ->where('is_multi_user', '>', 0);
-                            }
-                        }
-                    )->orwhere('is_admin', 1);
-                }
-            )->where('enable', 1)->where('expire_in', '>', date('Y-m-d H:i:s'))->get();
-
-            $muPort = Tools::get_MuOutPortArray($node->server);
-            if ($muPort['type'] == 0) {
-                foreach ($mu_users_raw as $user_raw) {
-                    if ($user_raw->is_multi_user != 0 && in_array($user_raw->port, array_keys($muPort['port']))) {
-                        $user_raw->port = $muPort['port'][$user_raw->port];
                     }
-                    $users_raw[] = $user_raw;
-                }
-            } else {
-                foreach ($mu_users_raw as $user_raw) {
-                    if ($user_raw->is_multi_user != 0) {
-                        $user_raw->port = ($user_raw->port + $muPort['type']);
-                    }
-                    $users_raw[] = $user_raw;
-                }
+                )->orwhere('is_admin', 1);
             }
-        }
+        )
+            ->where('enable', 1)->where('expire_in', '>', date('Y-m-d H:i:s'))->get();
 
         $users = array();
 
@@ -136,17 +84,27 @@ class UserController extends BaseController
         );
 
         foreach ($users_raw as $user_raw) {
-            if ($user_raw->transfer_enable > $user_raw->u + $user_raw->d) {
-                $user_raw = Tools::keyFilter($user_raw, $key_list);
-                $user_raw->uuid = $user_raw->getUuid();
-                $users[] = $user_raw;
-            } elseif ($_ENV['keep_connect'] === true) {
-                // 流量耗尽用户限速至 1Mbps
-                $user_raw = Tools::keyFilter($user_raw, $key_list);
-                $user_raw->uuid = $user_raw->getUuid();
-                $user_raw->node_speedlimit = 1;
-                $users[] = $user_raw;
+            if ($user_raw->transfer_enable <= $user_raw->u + $user_raw->d) {
+                if ($_ENV['keep_connect'] === true) {
+                    // 流量耗尽用户限速至 1Mbps
+                    $user_raw->node_speedlimit = 1;
+                } else {
+                    continue;
+                }
             }
+            if ($mu_port_migration === true && $user_raw->is_multi_user != 0) {
+                // 下发偏移后端口
+                if ($muPort['type'] == 0) {
+                    if (in_array($user_raw->port, array_keys($muPort['port']))) {
+                        $user_raw->port = $muPort['port'][$user_raw->port];
+                    }
+                } else {
+                    $user_raw->port = ($user_raw->port + $muPort['type']);
+                }
+            }
+            $user_raw = Tools::keyFilter($user_raw, $key_list);
+            $user_raw->uuid = $user_raw->getUuid();
+            $users[] = $user_raw;
         }
 
         $res = [
