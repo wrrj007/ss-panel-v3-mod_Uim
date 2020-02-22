@@ -15,10 +15,7 @@ use App\Utils\{
     AppURI,
     ConfRender
 };
-use App\Services\{
-    Config,
-    AppsProfiles
-};
+use App\Services\Config;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -667,31 +664,23 @@ class LinkController extends BaseController
             $Rule['type'] = 'ss';
         }
         $items = URL::getNew_AllItems($user, $Rule);
+        $Nodes = [];
         $All_Proxy = '';
         foreach ($items as $item) {
             $out = AppURI::getSurgeURI($item, $surge);
             if ($out !== null) {
+                $Nodes[] = $item;
                 $All_Proxy .= $out . PHP_EOL;
             }
         }
-        if (isset($opts['profiles']) && in_array((string) $opts['profiles'], array_keys(AppsProfiles::Surge()))) {
-            $Profiles = (string) trim($opts['profiles']);
+        if (isset($opts['profiles']) && in_array($opts['profiles'], array_keys($_ENV['Surge_Profiles']))) {
+            $Profiles = $opts['profiles'];
             $userapiUrl .= ('&profiles=' . $Profiles);
         } else {
             $Profiles = 'default'; // 默认策略组
         }
-        $ProxyGroups = ConfController::getSurgeConfProxyGroup($items, AppsProfiles::Surge()[$Profiles]['ProxyGroup']);
-        $ProxyGroups = ConfController::fixSurgeProxyGroup($ProxyGroups, AppsProfiles::Surge()[$Profiles]['Checks']);
-        $ProxyGroups = ConfController::getSurgeProxyGroup2String($ProxyGroups);
 
-        $render = ConfRender::getTemplateRender();
-        $render->assign('user', $user)
-            ->assign('surge', $surge)
-            ->assign('userapiUrl', $userapiUrl)
-            ->assign('All_Proxy', $All_Proxy)
-            ->assign('ProxyGroups', $ProxyGroups);
-
-        return $render->fetch('surge.tpl');
+        return ConfController::getSurgeConfs($user, $All_Proxy, $Nodes, $_ENV['Surge_Profiles'][$Profiles]);
     }
 
     /**
@@ -791,32 +780,25 @@ class LinkController extends BaseController
     {
         $subInfo = self::getSubinfo($user, 0);
         $userapiUrl = $subInfo['surfboard'];
+        $Nodes = [];
         $All_Proxy = '';
         $Rule['type'] = 'ss';
         $items = URL::getNew_AllItems($user, $Rule);
         foreach ($items as $item) {
             $out = AppURI::getSurfboardURI($item);
             if ($out !== null) {
+                $Nodes[] = $item;
                 $All_Proxy .= $out . PHP_EOL;
             }
         }
-        if (isset($opts['profiles']) && in_array((string) $opts['profiles'], array_keys(AppsProfiles::Surfboard()))) {
-            $Profiles = (string) trim($opts['profiles']);
+        if (isset($opts['profiles']) && in_array($opts['profiles'], array_keys($_ENV['Surfboard_Profiles']))) {
+            $Profiles = $opts['profiles'];
             $userapiUrl .= ('&profiles=' . $Profiles);
         } else {
             $Profiles = 'default'; // 默认策略组
         }
-        $ProxyGroups = ConfController::getSurgeConfProxyGroup($items, AppsProfiles::Surfboard()[$Profiles]['ProxyGroup']);
-        $ProxyGroups = ConfController::fixSurgeProxyGroup($ProxyGroups, AppsProfiles::Surfboard()[$Profiles]['Checks']);
-        $ProxyGroups = ConfController::getSurgeProxyGroup2String($ProxyGroups);
 
-        $render = ConfRender::getTemplateRender();
-        $render->assign('user', $user)
-            ->assign('userapiUrl', $userapiUrl)
-            ->assign('All_Proxy', $All_Proxy)
-            ->assign('ProxyGroups', $ProxyGroups);
-
-        return $render->fetch('surfboard.tpl');
+        return ConfController::getSurgeConfs($user, $All_Proxy, $Nodes, $_ENV['Surfboard_Profiles'][$Profiles]);
     }
 
     /**
@@ -842,25 +824,14 @@ class LinkController extends BaseController
                 $Proxys[] = $Proxy;
             }
         }
-        if (isset($opts['profiles']) && in_array((string) $opts['profiles'], array_keys(AppsProfiles::Clash()))) {
-            $Profiles = (string) trim($opts['profiles']);
+        if (isset($opts['profiles']) && in_array($opts['profiles'], array_keys($_ENV['Clash_Profiles']))) {
+            $Profiles = $opts['profiles'];
             $userapiUrl .= ('&profiles=' . $Profiles);
         } else {
             $Profiles = 'default'; // 默认策略组
         }
-        $ProxyGroups = ConfController::getClashConfProxyGroup($Proxys, AppsProfiles::Clash()[$Profiles]['ProxyGroup']);
-        $ProxyGroups = ConfController::fixClashProxyGroup($ProxyGroups, AppsProfiles::Clash()[$Profiles]['Checks']);
-        $ProxyGroups = ConfController::getClashProxyGroup2String($ProxyGroups);
 
-        $render = ConfRender::getTemplateRender();
-        $render->assign('user', $user)
-            ->assign('userapiUrl', $userapiUrl)
-            ->assign('opts', $opts)
-            ->assign('Proxys', $Proxys)
-            ->assign('ProxyGroups', $ProxyGroups)
-            ->assign('Profiles', $Profiles);
-
-        return $render->fetch('clash.tpl');
+        return ConfController::getClashConfs($user, $Proxys, $_ENV['Clash_Profiles'][$Profiles]);
     }
 
     /**
