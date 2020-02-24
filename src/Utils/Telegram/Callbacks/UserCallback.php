@@ -19,9 +19,9 @@ use App\Utils\{
     Telegram\TelegramTools
 };
 
-class UserCallback
+class UserCallback extends Callback
 {
-    public static function getUserIndexKeyboard($user)
+    public function getUserIndexKeyboard($user)
     {
         $checkin = (!$user->isAbleToCheckin() ? '已签到' : '签到');
         $Keyboard = [
@@ -76,8 +76,9 @@ class UserCallback
      * 用户相关回调数据处理
      *
      */
-    public static function handler($bot, $Callback, $Data, $SendUser)
+    public function handler($bot, $Callback, $Data, $SendUser)
     {
+        $this->AllowEditMessage;
         $user = TelegramTools::getUser($SendUser['id']);
         if ($user == null) {
             if ($Data['ChatID'] < 0) {
@@ -149,7 +150,7 @@ class UserCallback
         }
     }
 
-    public static function getUserCenterKeyboard($user)
+    public function getUserCenterKeyboard($user)
     {
         $text = Reply::getUserTitle($user);
         $text .= PHP_EOL . PHP_EOL;
@@ -193,7 +194,7 @@ class UserCallback
      * 用户中心
      *
      */
-    public static function UserCenter($user, $bot, $Callback, $Data, $SendUser)
+    public function UserCenter($user, $bot, $Callback, $Data, $SendUser)
     {
         $back = [
             [
@@ -340,7 +341,7 @@ class UserCallback
             : $bot->sendMessage($sendMessage));
     }
 
-    public static function getUserEditKeyboard($user)
+    public function getUserEditKeyboard($user)
     {
         $text = Reply::getUserTitle($user);
         $keyboard = [
@@ -402,7 +403,7 @@ class UserCallback
      * 用户编辑
      *
      */
-    public static function UserEdit($user, $bot, $Callback, $Data, $SendUser)
+    public function UserEdit($user, $bot, $Callback, $Data, $SendUser)
     {
         if ($Data['ChatID'] < 0) {
             return TelegramTools::SendPost(
@@ -733,7 +734,7 @@ class UserCallback
             : $bot->sendMessage($sendMessage));
     }
 
-    public static function getUserSubscribeKeyboard($user)
+    public function getUserSubscribeKeyboard($user)
     {
         $text = '订阅中心.';
         $keyboard = [
@@ -845,7 +846,7 @@ class UserCallback
      * 用户订阅
      *
      */
-    public static function UserSubscribe($user, $bot, $Callback, $Data, $SendUser)
+    public function UserSubscribe($user, $bot, $Callback, $Data, $SendUser)
     {
         $CallbackDataExplode = explode('|', $Data['CallbackData']);
         // 订阅中心
@@ -981,7 +982,7 @@ class UserCallback
             : $bot->sendMessage($sendMessage));
     }
 
-    public static function getUserInviteKeyboard($user)
+    public function getUserInviteKeyboard($user)
     {
         if (!$paybacks_sum = Payback::where('ref_by', $user->id)->sum('ref_get')) {
             $paybacks_sum = 0;
@@ -1020,7 +1021,7 @@ class UserCallback
      * 分享计划
      *
      */
-    public static function UserInvite($user, $bot, $Callback, $Data, $SendUser)
+    public function UserInvite($user, $bot, $Callback, $Data, $SendUser)
     {
         $CallbackDataExplode = explode('|', $Data['CallbackData']);
         $Operate = explode('.', $CallbackDataExplode[0]);
@@ -1074,7 +1075,7 @@ class UserCallback
      * 每日签到
      *
      */
-    public static function UserCheckin($user, $bot, $Callback, $Data, $SendUser)
+    public function UserCheckin($user, $bot, $Callback, $Data, $SendUser)
     {
         $checkin = $user->checkin();
         TelegramTools::SendPost(

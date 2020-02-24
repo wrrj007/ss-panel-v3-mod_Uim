@@ -6,8 +6,7 @@ $_ENV['Surge_Profiles'] = [
         'General' => [
             'loglevel' => 'notify',
             'dns-server' => 'system, 117.50.10.10, 119.29.29.29, 223.6.6.6',
-            'skip-proxy' => '127.0.0.1, 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, 100.64.0.0/10,
-              17.0.0.0/8, localhost, *.local, *.crashlytics.com',
+            'skip-proxy' => '127.0.0.1, 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, 100.64.0.0/10, 17.0.0.0/8, localhost, *.local, *.crashlytics.com',
             'external-controller-access' => 'China@0.0.0.0:8233',
             'allow-wifi-access' => 'true',
             'enhanced-mode-by-rule' => 'false',
@@ -66,7 +65,7 @@ $_ENV['Surge_Profiles'] = [
             ]
         ],
         'Rule' => [
-            'source' => ''
+            'source' => 'surge/default.conf'
         ]
     ]
 ];
@@ -84,11 +83,9 @@ $_ENV['Surge2_Profiles'] = [
             'allow-wifi-access'          => 'true',
             'external-controller-access' => 'ChinaX@0.0.0.0:8233'
         ],
-        'Proxy' => [
-            '🚀 Direct = direct'
-        ],
+        'Proxy' => [],
         'ProxyGroup' => [
-/*
+            /*
 # 白名单模式 PROXY，黑名单模式 DIRECT
 Final = select,PROXY,DIRECT
 # 节点选项
@@ -137,7 +134,7 @@ Apple = select,DIRECT,PROXY
             ]
         ],
         'Rule' => [
-            'source' => ''
+            'source' => 'surge2/default.conf'
         ]
     ]
 ];
@@ -192,6 +189,9 @@ $_ENV['Clash_Profiles'] = [
                     ]
                 ]
             ]
+        ],
+        'Rule' => [
+            'source' => 'clash/default.conf'
         ]
     ]
 ];
@@ -227,6 +227,9 @@ $_ENV['Surfboard_Profiles'] = [
                     ]
                 ]
             ]
+        ],
+        'Rule' => [
+            'source' => 'surfboard/default.conf'
         ]
     ]
 ];

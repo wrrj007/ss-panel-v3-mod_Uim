@@ -6,7 +6,70 @@ use App\Utils\Telegram\TelegramTools;
 
 class Callback
 {
-    public static function CallbackQueryMethod($bot, $Callback)
+    /**
+     * Bot
+     */
+    private $bot;
+
+    /**
+     * 触发用户
+     */
+    private $triggerUser;
+
+    /**
+     * 回调数据
+     */
+    private $CallbackData;
+
+    /**
+     * 消息会话 ID
+     */
+    private $ChatID;
+
+    /**
+     * 触发源信息 ID
+     */
+    private $MessageID;
+
+    /**
+     * 源消息是否可编辑
+     */
+    private $AllowEditMessage;
+
+    public function __construct($bot, $Callback)
+    {
+        $this->bot              = $bot;
+        $this->ChatID           = $Callback->getMessage()->getChat()->getId();
+        $this->MessageID        = $Callback->getMessage()->getMessageId();
+        $this->CallbackData     = $Callback->getData();
+        $this->AllowEditMessage = time() < $Callback->getMessage()->getDate() + 172800;
+        $this->triggerUser      = [
+            'id'       => $Callback->getFrom()->getId(),
+            'name'     => $Callback->getFrom()->getFirstName() . ' ' . $Callback->getFrom()->getLastName(),
+            'username' => $Callback->getFrom()->getUsername(),
+        ];
+
+        if ($this->ChatID < 0 && $_ENV['telegram_group_quiet'] === true) {
+            // 群组中不回应
+            return;
+        }
+
+        switch (true) {
+            case (strpos($this->CallbackData, 'user.') === 0):
+                // 用户相关
+                UserCallback::handler($bot, $Callback, $Data, $SendUser);
+                break;
+            // case (strpos($this->CallbackData, 'admin.') === 0):
+            //     // 管理员
+            //     break;
+            default:
+                // 回调数据处理
+                $this->CallbackDataHandler();
+                break;
+        }
+    }
+
+    public function CallbackQueryMethod($bot, $Callback)
     {
         // 触发用户
         $SendUser = [
@@ -30,27 +93,27 @@ class Callback
             'AllowEditMessage'  => $AllowEditMessage,                               // 消息是否可编辑
         ];
 
-        if ($Data['ChatID'] < 0 && $_ENV['telegram_group_quiet'] === true) {
+        if ($this->ChatID < 0 && $_ENV['telegram_group_quiet'] === true) {
             // 群组中不回应
             return;
         }
 
         switch (true) {
-            case (strpos($Data['CallbackData'], 'user.') === 0):
+            case (strpos($this->CallbackData, 'user.') === 0):
                 // 用户相关
                 UserCallback::handler($bot, $Callback, $Data, $SendUser);
                 break;
-            // case (strpos($Data['CallbackData'], 'admin.') === 0):
+            // case (strpos($this->CallbackData, 'admin.') === 0):
             //     // 管理员
             //     break;
             default:
                 // 回调数据处理
-                self::CallbackDataHandler($bot, $Callback, $Data, $SendUser);
+                $this->CallbackDataHandler($bot, $Callback, $Data, $SendUser);
                 break;
         }
     }
 
-    public static function getGuestIndexKeyboard()
+    public function getGuestIndexKeyboard()
     {
         $Keyboard = [
             [
@@ -76,9 +139,9 @@ class Callback
      * 回调数据处理
      *
      */
-    public static function CallbackDataHandler($bot, $Callback, $Data, $SendUser)
+    public function CallbackDataHandler()
     {
-        $CallbackDataExplode = explode('|', $Data['CallbackData']);
+        $CallbackDataExplode = explode('|', $this->CallbackData);
         switch ($CallbackDataExplode[0]) {
             case 'general.pricing':
                 // 产品介绍
@@ -124,13 +187,13 @@ class Callback
         $sendMessage = array_merge(
             $sendMessage,
             [
-                'chat_id'       => $Data['ChatID'],
-                'message_id'    => $Data['MessageID'],
+                'chat_id'       => $this->ChatID,
+                'message_id'    => $this->MessageID,
                 'parse_mode'    => 'HTML',
             ]
         );
-        return ($Data['AllowEditMessage']
+        return ($this->AllowEditMessage
             ? TelegramTools::SendPost('editMessageText', $sendMessage)
-            : $bot->sendMessage($sendMessage));
+            : $this->bot->sendMessage($sendMessage));
     }
 }
