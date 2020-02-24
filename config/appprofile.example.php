@@ -71,37 +71,73 @@ $_ENV['Surge_Profiles'] = [
     ]
 ];
 
-$_ENV['Surfboard_Profiles'] = [
+$_ENV['Surge2_Profiles'] = [
     'default' => [
         'Checks' => [],
+        'General' => [
+            'loglevel'                   => 'notify',
+            'ipv6'                       => 'true',
+            'replica'                    => 'false',
+            'dns-server'                 => 'system, 119.29.29.29, 223.5.5.5',
+            'skip-proxy'                 => '127.0.0.1, 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, 100.64.0.0/10, 17.0.0.0/8, localhost, *.local, *.crashlytics.com',
+            'bypass-system'              => 'true',
+            'allow-wifi-access'          => 'true',
+            'external-controller-access' => 'ChinaX@0.0.0.0:8233'
+        ],
+        'Proxy' => [
+            '🚀 Direct = direct'
+        ],
         'ProxyGroup' => [
+/*
+# 白名单模式 PROXY，黑名单模式 DIRECT
+Final = select,PROXY,DIRECT
+# 节点选项
+PROXY = select,Auto,1,2,3,4
+# 国际流媒体服务
+GlobalMedia = select,PROXY,1,2,3,4
+# Apple 服务策略组
+Apple = select,DIRECT,PROXY
+*/
             [
-                'name' => '🍃 Proxy',
+                'name' => '🍃 PROXY',
                 'type' => 'select',
                 'content' => [
                     'regex' => '(.*)'
                 ]
             ],
             [
-                'name' => '🍂 Domestic',
+                'name' => '🍂 GlobalMedia',
                 'type' => 'select',
                 'content' => [
                     'left-proxies' => [
                         '🚀 Direct',
-                        '🍃 Proxy'
+                        '🍃 PROXY'
                     ]
                 ]
             ],
             [
-                'name' => '☁️ Others',
+                'name' => '🍎 Apple',
                 'type' => 'select',
                 'content' => [
                     'left-proxies' => [
-                        '🍃 Proxy',
+                        '🚀 Direct',
+                        '🍃 PROXY'
+                    ]
+                ]
+            ],
+            [
+                'name' => '☁️ Final',
+                'type' => 'select',
+                'content' => [
+                    'left-proxies' => [
+                        '🍃 PROXY',
                         '🍂 Domestic'
                     ]
                 ]
             ]
+        ],
+        'Rule' => [
+            'source' => ''
         ]
     ]
 ];
@@ -153,6 +189,41 @@ $_ENV['Clash_Profiles'] = [
                     'left-proxies' => [
                         'Proxy',
                         'Domestic'
+                    ]
+                ]
+            ]
+        ]
+    ]
+];
+
+$_ENV['Surfboard_Profiles'] = [
+    'default' => [
+        'Checks' => [],
+        'ProxyGroup' => [
+            [
+                'name' => '🍃 Proxy',
+                'type' => 'select',
+                'content' => [
+                    'regex' => '(.*)'
+                ]
+            ],
+            [
+                'name' => '🍂 Domestic',
+                'type' => 'select',
+                'content' => [
+                    'left-proxies' => [
+                        '🚀 Direct',
+                        '🍃 Proxy'
+                    ]
+                ]
+            ],
+            [
+                'name' => '☁️ Others',
+                'type' => 'select',
+                'content' => [
+                    'left-proxies' => [
+                        '🍃 Proxy',
+                        '🍂 Domestic'
                     ]
                 ]
             ]

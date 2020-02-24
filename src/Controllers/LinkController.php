@@ -673,14 +673,15 @@ class LinkController extends BaseController
                 $All_Proxy .= $out . PHP_EOL;
             }
         }
-        if (isset($opts['profiles']) && in_array($opts['profiles'], array_keys($_ENV['Surge_Profiles']))) {
+        $variable = ($surge == 2 ? 'Surge2_Profiles' : 'Surge_Profiles');
+        if (isset($opts['profiles']) && in_array($opts['profiles'], array_keys($_ENV[$variable]))) {
             $Profiles = $opts['profiles'];
             $userapiUrl .= ('&profiles=' . $Profiles);
         } else {
-            $Profiles = 'default'; // 默认策略组
+            $Profiles = 'default'; // 默认配置
         }
 
-        return ConfController::getSurgeConfs($user, $All_Proxy, $Nodes, $_ENV['Surge_Profiles'][$Profiles]);
+        return ConfController::getSurgeConfs($user, $All_Proxy, $Nodes, $_ENV[$variable][$Profiles]);
     }
 
     /**
