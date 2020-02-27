@@ -72,7 +72,6 @@ class Config
             'auto_detect_ban'        => $_ENV['auto_detect_ban'],
 
             'use_new_telegram_bot'  => $_ENV['use_new_telegram_bot'],
-            'protocol_specify'      => $_ENV['protocol_specify'],
 
             'use_this_doc'          => $_ENV['use_this_doc'],
             'documents_name'        => $_ENV['documents_name'],

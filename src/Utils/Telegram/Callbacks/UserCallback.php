@@ -76,65 +76,55 @@ class UserCallback extends Callback
      * 用户相关回调数据处理
      *
      */
-    public function handler($bot, $Callback, $Data, $SendUser)
+    public function handler()
     {
-        $this->AllowEditMessage;
-        $user = TelegramTools::getUser($SendUser['id']);
+        $user = TelegramTools::getUser($this->triggerUser['id']);
         if ($user == null) {
-            if ($Data['ChatID'] < 0) {
-                return TelegramTools::SendPost(
-                    'answerCallbackQuery',
-                    [
-                        'callback_query_id' => $Callback->getId(),
-                        'text'              => '您好，您尚未绑定账户，无法进行操作.',
-                        'show_alert'        => true,
-                    ]
-                );
+            if ($this->ChatID < 0) {
+                return $this->answerCallbackQuery([
+                    'text'              => '您好，您尚未绑定账户，无法进行操作.',
+                    'show_alert'        => true,
+                ]);
             } else {
-                return Callback::CallbackDataHandler($bot, $Callback, $Data, $SendUser);
+                return $this->CallbackDataHandler();
             }
         }
-        $CallbackDataExplode = explode('|', $Data['CallbackData']);
+        $CallbackDataExplode = explode('|', $this->CallbackData);
         $Operate = explode('.', $CallbackDataExplode[0]);
         $op_1 = $Operate[1];
         switch ($op_1) {
             case 'edit':
                 // 资料编辑
-                self::UserEdit($user, $bot, $Callback, $Data, $SendUser);
+                self::UserEdit($user, );
                 break;
             case 'subscribe':
                 // 订阅中心
-                self::UserSubscribe($user, $bot, $Callback, $Data, $SendUser);
+                self::UserSubscribe($user, );
                 break;
             case 'invite':
                 // 分享计划
-                self::UserInvite($user, $bot, $Callback, $Data, $SendUser);
+                self::UserInvite($user, );
                 break;
             case 'checkin':
                 // 签到
-                if ($Operate[2] != $SendUser['id']) {
-                    return TelegramTools::SendPost(
-                        'answerCallbackQuery',
-                        [
-                            'callback_query_id' => $Callback->getId(),
-                            'text'              => '您好，您无法操作他人的账户.',
-                            'show_alert'        => true,
-                        ]
-                    );
+                if ($Operate[2] != $this->triggerUser['id']) {
+                    $this->answerCallbackQuery([
+                        'text'              => '您好，您无法操作他人的账户.',
+                        'show_alert'        => true,
+                    ]);
+                    return;
                 }
-                self::UserCheckin($user, $bot, $Callback, $Data, $SendUser);
+                self::UserCheckin($user, );
                 break;
             case 'center':
                 // 用户中心
-                self::UserCenter($user, $bot, $Callback, $Data, $SendUser);
+                self::UserCenter($user, );
                 break;
             default:
                 // 用户首页
                 $temp = self::getUserIndexKeyboard($user);
                 $sendMessage = [
                     'text'                      => $temp['text'],
-                    'chat_id'                   => $Data['ChatID'],
-                    'message_id'                => $Data['MessageID'],
                     'parse_mode'                => 'HTML',
                     'disable_web_page_preview'  => false,
                     'reply_to_message_id'       => null,
@@ -142,11 +132,10 @@ class UserCallback extends Callback
                         [
                             'inline_keyboard' => $temp['keyboard']
                         ]
-                    ),
+                    )
                 ];
-                return ($Data['AllowEditMessage']
-                    ? TelegramTools::SendPost('editMessageText', $sendMessage)
-                    : $bot->sendMessage($sendMessage));
+                $this->replyWithMessage($sendMessage);
+                return;
         }
     }
 
@@ -194,7 +183,7 @@ class UserCallback extends Callback
      * 用户中心
      *
      */
-    public function UserCenter($user, $bot, $Callback, $Data, $SendUser)
+    public function UserCenter($user)
     {
         $back = [
             [
@@ -208,7 +197,7 @@ class UserCallback extends Callback
                 ]
             ]
         ];
-        $CallbackDataExplode = explode('|', $Data['CallbackData']);
+        $CallbackDataExplode = explode('|', $this->CallbackData);
         $Operate = explode('.', $CallbackDataExplode[0]);
         $op_2 = $Operate[2];
         switch ($op_2) {
@@ -231,6 +220,7 @@ class UserCallback extends Callback
                 $sendMessage = [
                     'text'                      => $text,
                     'disable_web_page_preview'  => false,
+                    'parse_mode'                => 'HTML',
                     'reply_to_message_id'       => null,
                     'reply_markup'              => json_encode(
                         [
@@ -260,6 +250,7 @@ class UserCallback extends Callback
                 $sendMessage = [
                     'text'                      => $text,
                     'disable_web_page_preview'  => false,
+                    'parse_mode'                => 'HTML',
                     'reply_to_message_id'       => null,
                     'reply_markup'              => json_encode(
                         [
@@ -282,6 +273,7 @@ class UserCallback extends Callback
                 $sendMessage = [
                     'text'                      => $text,
                     'disable_web_page_preview'  => false,
+                    'parse_mode'                => 'HTML',
                     'reply_to_message_id'       => null,
                     'reply_markup'              => json_encode(
                         [
@@ -306,6 +298,7 @@ class UserCallback extends Callback
                 $sendMessage = [
                     'text'                      => $text,
                     'disable_web_page_preview'  => false,
+                    'parse_mode'                => 'HTML',
                     'reply_to_message_id'       => null,
                     'reply_markup'              => json_encode(
                         [
@@ -328,17 +321,8 @@ class UserCallback extends Callback
                 ];
                 break;
         }
-        $sendMessage = array_merge(
-            [
-                'chat_id'       => $Data['ChatID'],
-                'message_id'    => $Data['MessageID'],
-                'parse_mode'    => 'HTML',
-            ],
-            $sendMessage
-        );
-        return ($Data['AllowEditMessage']
-            ? TelegramTools::SendPost('editMessageText', $sendMessage)
-            : $bot->sendMessage($sendMessage));
+        $this->replyWithMessage($sendMessage);
+        return;
     }
 
     public function getUserEditKeyboard($user)
@@ -403,17 +387,13 @@ class UserCallback extends Callback
      * 用户编辑
      *
      */
-    public function UserEdit($user, $bot, $Callback, $Data, $SendUser)
+    public function UserEdit($user)
     {
-        if ($Data['ChatID'] < 0) {
-            return TelegramTools::SendPost(
-                'answerCallbackQuery',
-                [
-                    'callback_query_id' => $Callback->getId(),
-                    'text'              => '无法在群组中进行该操作.',
-                    'show_alert'        => true,
-                ]
-            );
+        if ($this->ChatID < 0) {
+            return $this->answerCallbackQuery([
+                'text'              => '无法在群组中进行该操作.',
+                'show_alert'        => true,
+            ]);
         }
         $back = [
             [
@@ -427,21 +407,17 @@ class UserCallback extends Callback
                 ]
             ]
         ];
-        $CallbackDataExplode = explode('|', $Data['CallbackData']);
+        $CallbackDataExplode = explode('|', $this->CallbackData);
         $Operate = explode('.', $CallbackDataExplode[0]);
         $op_2 = $Operate[2];
         switch ($op_2) {
             case 'update_link':
                 // 重置订阅链接
                 $user->clean_link();
-                TelegramTools::SendPost(
-                    'answerCallbackQuery',
-                    [
-                        'callback_query_id' => $Callback->getId(),
-                        'text'              => '订阅链接重置成功，请在下方重新更新订阅.',
-                        'show_alert'        => true,
-                    ]
-                );
+                $this->answerCallbackQuery([
+                    'text'              => '订阅链接重置成功，请在下方重新更新订阅.',
+                    'show_alert'        => true,
+                ]);
                 $temp = self::getUserSubscribeKeyboard($user);
                 $sendMessage = [
                     'text'                      => $temp['text'],
@@ -464,14 +440,10 @@ class UserCallback extends Callback
                     $answerCallbackQuery = '出现错误，连接密码更新失败，请联系管理员.';
                     $temp = self::getUserEditKeyboard($user);
                 }
-                TelegramTools::SendPost(
-                    'answerCallbackQuery',
-                    [
-                        'callback_query_id' => $Callback->getId(),
-                        'text'              => $answerCallbackQuery,
-                        'show_alert'        => true,
-                    ]
-                );
+                $this->answerCallbackQuery([
+                    'text'              => $answerCallbackQuery,
+                    'show_alert'        => true,
+                ]);
                 $sendMessage = [
                     'text'                      => $temp['text'],
                     'disable_web_page_preview'  => false,
@@ -650,7 +622,7 @@ class UserCallback extends Callback
                 break;
             case 'unbind':
                 // Telegram 账户解绑
-                $Data['AllowEditMessage'] = false;
+                $this->AllowEditMessage = false;
                 $text = '发送 **/unbind 账户邮箱** 进行解绑.';
                 if ($_ENV['unbind_kick_member'] === true) {
                     $text .= PHP_EOL . PHP_EOL . '根据管理员的设定，您解绑账户将会被自动移出用户群.';
@@ -670,17 +642,13 @@ class UserCallback extends Callback
                         'unbanChatMember',
                         [
                             'chat_id'   => $_ENV['telegram_chatid'],
-                            'user_id'   => $SendUser['id'],
+                            'user_id'   => $this->triggerUser['id'],
                         ]
                     );
-                    TelegramTools::SendPost(
-                        'answerCallbackQuery',
-                        [
-                            'callback_query_id' => $Callback->getId(),
-                            'text'              => '已提交解封，如您仍无法加入群组，请联系管理员.',
-                            'show_alert'        => true,
-                        ]
-                    );
+                    $this->answerCallbackQuery([
+                        'text'              => '已提交解封，如您仍无法加入群组，请联系管理员.',
+                        'show_alert'        => true,
+                    ]);
                 }
                 $sendMessage = [
                     'text'                      => '如果您已经身处用户群，请勿随意点击解封，否则会导致您被移除出群组.',
@@ -721,17 +689,14 @@ class UserCallback extends Callback
                 ];
                 break;
         }
-        $sendMessage = array_merge(
-            [
-                'chat_id'       => $Data['ChatID'],
-                'message_id'    => $Data['MessageID'],
-                'parse_mode'    => 'HTML',
-            ],
-            $sendMessage
+        $this->replyWithMessage(
+            array_merge(
+                [
+                    'parse_mode'    => 'HTML',
+                ],
+                $sendMessage
+            )
         );
-        return ($Data['AllowEditMessage']
-            ? TelegramTools::SendPost('editMessageText', $sendMessage)
-            : $bot->sendMessage($sendMessage));
     }
 
     public function getUserSubscribeKeyboard($user)
@@ -846,9 +811,9 @@ class UserCallback extends Callback
      * 用户订阅
      *
      */
-    public function UserSubscribe($user, $bot, $Callback, $Data, $SendUser)
+    public function UserSubscribe($user)
     {
-        $CallbackDataExplode = explode('|', $Data['CallbackData']);
+        $CallbackDataExplode = explode('|', $this->CallbackData);
         // 订阅中心
         if (isset($CallbackDataExplode[1])) {
             $temp = [];
@@ -875,9 +840,9 @@ class UserCallback extends Callback
                     $string = LinkController::getClash($user, 1, [], [], false);
                     fwrite($fh, $string);
                     fclose($fh);
-                    $bot->sendDocument(
+                    $this->bot->sendDocument(
                         [
-                            'chat_id'       => $Data['ChatID'],
+                            'chat_id'       => $this->ChatID,
                             'document'      => $filepath,
                             'caption'       => $temp['text'],
                         ]
@@ -892,9 +857,9 @@ class UserCallback extends Callback
                     $string = LinkController::getClash($user, 2, [], [], false);
                     fwrite($fh, $string);
                     fclose($fh);
-                    $bot->sendDocument(
+                    $this->bot->sendDocument(
                         [
-                            'chat_id'       => $Data['ChatID'],
+                            'chat_id'       => $this->ChatID,
                             'document'      => $filepath,
                             'caption'       => $temp['text'],
                         ]
@@ -909,9 +874,9 @@ class UserCallback extends Callback
                     $string = LinkController::GetQuantumult($user, 3, [], [], false);
                     fwrite($fh, $string);
                     fclose($fh);
-                    $bot->sendDocument(
+                    $this->bot->sendDocument(
                         [
-                            'chat_id'       => $Data['ChatID'],
+                            'chat_id'       => $this->ChatID,
                             'document'      => $filepath,
                             'caption'       => $temp['text'],
                         ]
@@ -926,9 +891,9 @@ class UserCallback extends Callback
                     $string = LinkController::getSurge($user, 2, [], [], false);
                     fwrite($fh, $string);
                     fclose($fh);
-                    $bot->sendDocument(
+                    $this->bot->sendDocument(
                         [
-                            'chat_id'       => $Data['ChatID'],
+                            'chat_id'       => $this->ChatID,
                             'document'      => $filepath,
                             'caption'       => $temp['text'],
                         ]
@@ -943,9 +908,9 @@ class UserCallback extends Callback
                     $string = LinkController::getSurge($user, 3, [], [], false);
                     fwrite($fh, $string);
                     fclose($fh);
-                    $bot->sendDocument(
+                    $this->bot->sendDocument(
                         [
-                            'chat_id'       => $Data['ChatID'],
+                            'chat_id'       => $this->ChatID,
                             'document'      => $filepath,
                             'caption'       => $temp['text'],
                         ]
@@ -969,17 +934,14 @@ class UserCallback extends Callback
                 ]
             ),
         ];
-        $sendMessage = array_merge(
-            [
-                'chat_id'       => $Data['ChatID'],
-                'message_id'    => $Data['MessageID'],
-                'parse_mode'    => 'HTML',
-            ],
-            $sendMessage
+        $this->replyWithMessage(
+            array_merge(
+                [
+                    'parse_mode'    => 'HTML',
+                ],
+                $sendMessage
+            )
         );
-        return ($Data['AllowEditMessage']
-            ? TelegramTools::SendPost('editMessageText', $sendMessage)
-            : $bot->sendMessage($sendMessage));
     }
 
     public function getUserInviteKeyboard($user)
@@ -1021,14 +983,14 @@ class UserCallback extends Callback
      * 分享计划
      *
      */
-    public function UserInvite($user, $bot, $Callback, $Data, $SendUser)
+    public function UserInvite($user)
     {
-        $CallbackDataExplode = explode('|', $Data['CallbackData']);
+        $CallbackDataExplode = explode('|', $this->CallbackData);
         $Operate = explode('.', $CallbackDataExplode[0]);
         $op_2 = $Operate[2];
         switch ($op_2) {
             case 'get':
-                $Data['AllowEditMessage'] = false;
+                $this->AllowEditMessage = false;
                 $code = InviteCode::where('user_id', $user->id)->first();
                 if ($code == null) {
                     $user->addInviteCode();
@@ -1057,17 +1019,14 @@ class UserCallback extends Callback
                 ];
                 break;
         }
-        $sendMessage = array_merge(
-            [
-                'chat_id'       => $Data['ChatID'],
-                'message_id'    => $Data['MessageID'],
-                'parse_mode'    => 'HTML',
-            ],
-            $sendMessage
+        $this->replyWithMessage(
+            array_merge(
+                [
+                    'parse_mode'    => 'HTML',
+                ],
+                $sendMessage
+            )
         );
-        return ($Data['AllowEditMessage']
-            ? TelegramTools::SendPost('editMessageText', $sendMessage)
-            : $bot->sendMessage($sendMessage));
     }
 
     /**
@@ -1075,19 +1034,15 @@ class UserCallback extends Callback
      * 每日签到
      *
      */
-    public function UserCheckin($user, $bot, $Callback, $Data, $SendUser)
+    public function UserCheckin($user)
     {
         $checkin = $user->checkin();
-        TelegramTools::SendPost(
-            'answerCallbackQuery',
-            [
-                'callback_query_id' => $Callback->getId(),
-                'text'              => $checkin['msg'],
-                'show_alert'        => true,
-            ]
-        );
+        $this->answerCallbackQuery([
+            'text'              => $checkin['msg'],
+            'show_alert'        => true,
+        ]);
         // 回送信息
-        if ($Data['ChatID'] > 0) {
+        if ($this->ChatID > 0) {
             $temp = self::getUserIndexKeyboard($user);
         } else {
             $temp['text'] = Reply::getUserTitle($user);
@@ -1099,25 +1054,20 @@ class UserCallback extends Callback
                 [
                     [
                         'text'          => (!$user->isAbleToCheckin() ? '已签到' : '签到'),
-                        'callback_data' => 'user.checkin.' . $SendUser['id']
+                        'callback_data' => 'user.checkin.' . $this->triggerUser['id']
                     ]
                 ],
             ];
         }
-        $sendMessage = [
+        $this->replyWithMessage([
             'text'                  => $temp['text'] . PHP_EOL . PHP_EOL . $checkin['msg'],
-            'chat_id'               => $Data['ChatID'],
-            'message_id'            => $Data['MessageID'],
-            'reply_to_message_id'   => $Data['MessageID'],
+            'reply_to_message_id'   => $this->MessageID,
             'parse_mode'            => 'Markdown',
             'reply_markup'          => json_encode(
                 [
                     'inline_keyboard' => $temp['keyboard'],
                 ]
             ),
-        ];
-        return ($Data['AllowEditMessage']
-            ? TelegramTools::SendPost('editMessageText', $sendMessage)
-            : $bot->sendMessage($sendMessage));
+        ]);
     }
 }

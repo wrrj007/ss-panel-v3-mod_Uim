@@ -2,8 +2,6 @@
 
 namespace App\Utils\Telegram;
 
-use App\Models\User;
-use App\Services\Config;
 use Telegram\Bot\Api;
 use Exception;
 
@@ -28,7 +26,7 @@ class Process
             );
             $update = $bot->commandsHandler(true);
             if ($update->getCallbackQuery() !== null) {
-                Callbacks\Callback::CallbackQueryMethod($bot, $update->getCallbackQuery());
+                new Callbacks\Callback($bot, $update->getCallbackQuery());
             }
             if ($update->getMessage() !== null) {
                 Message::MessageMethod($bot, $update->getMessage());
