@@ -965,10 +965,17 @@ class URL
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;
         $return_array['obfs_param'] = $user->obfs_param;
-        if ($mu_port != 0 && strpos($node->server, ';') !== false) {
-            $node_tmp = Tools::OutPort($node->server, $node->name, $mu_port);
-            $return_array['port'] = $node_tmp['port'];
-            $node_name = $node_tmp['name'];
+        if (strpos($node->server, ';') !== false) {
+            if ($mu_port != 0) {
+                $node_tmp = Tools::OutPort($node->server, $node->name, $mu_port);
+                $return_array['port'] = $node_tmp['port'];
+                $node_name = $node_tmp['name'];
+            }
+            if ($mu_port == 0 && in_array($node->id, $_ENV['commonPortsOffset']) && $_ENV['mu_port_migration'] === true) {
+                $node_tmp = Tools::OutPort($node->server, $node->name, $user->port);
+                $return_array['port'] = $node_tmp['port'];
+                $node_name = $node_tmp['name'];
+            }
         }
         $return_array['passwd'] = $user->passwd;
         $return_array['method'] = $user->method;

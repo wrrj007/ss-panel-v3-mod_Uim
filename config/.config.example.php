@@ -381,7 +381,9 @@ $_ENV['muKeyList'] = [];                //多 key 列表
 $_ENV['subscribe_client'] = false;        //下载协议客户端时附带节点和订阅信息
 $_ENV['subscribe_client_url'] = '';       //使用独立的服务器提供附带节点和订阅信息的协议客户端下载，为空表示不使用
 
-$_ENV['mu_port_migration'] = false;       //为后端直接下发偏移后的端口
+$_ENV['mu_port_migration'] = false;       //仅 WEBAPI 可用，为后端直接下发偏移后的端口
+$_ENV['commonPortsOffset'] = [];          //仅 WEBAPI 可用，将普通端口也偏移后下发的节点 ID，仅上一项启用时有效，格式为 PHP 数组
+
 $_ENV['add_emoji_to_node_name'] = false;  //为部分订阅中默认添加 emoji
 $_ENV['add_appName_to_ss_uri'] = true;    //为 SS 节点名称中添加站点名
 $_ENV['enable_sub_cache'] = false;        //订阅信息缓存
