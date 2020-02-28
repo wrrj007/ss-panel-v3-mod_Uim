@@ -15,25 +15,30 @@ $_ENV['version'] = 1;    //仅当涉及【需要修改config以外的文件】�
 
 
 //基本设置--------------------------------------------------------------------------------------------
-$_ENV['key']     = '1145141919810';                //!!! 瞎 jb 修改此key为随机字符串确保网站安全 !!!
-$_ENV['debug']   = false;                          //正式环境请确保为 false
-$_ENV['appName'] = 'sspanel';                      //站点名称
-$_ENV['baseUrl'] = 'http://url.com';               //站点地址
-$_ENV['subUrl']  = $_ENV['baseUrl'] . '/link/';    //订阅地址，如需和站点名称相同，请不要修改
-$_ENV['muKey']   = 'default_mu_key';               //用于校验魔改后端请求，可以随意修改，但请保持前后端一致，否则节点不能工作！
+$_ENV['key']        = '1145141919810';                //!!! 瞎 jb 修改此key为随机字符串确保网站安全 !!!
+$_ENV['debug']      = false;                          //正式环境请确保为 false
+$_ENV['appName']    = 'sspanel';                      //站点名称
+$_ENV['baseUrl']    = 'http://url.com';               //站点地址
+$_ENV['muKey']      = 'default_mu_key';               //用于校验魔改后端请求，可以随意修改，但请保持前后端一致，否则节点不能工作！
+
+// 主站是否提供 WEBAPI
+// - 如果您全部节点使用数据库连接，则保持为 false
+// - 如果您拥有独立的 Webapi 站点或 Seed 等，则保持为 false
+// - 如果您不使用数据库连接并且无独立 Webapi 站点或 Seed 等，请更改为 true
+$_ENV['mainWebapi'] = false;
 
 
 //数据库设置--------------------------------------------------------------------------------------------
-$_ENV['db_driver']   = 'mysql';             //数据库程序
+$_ENV['db_driver']    = 'mysql';             //数据库程序
 // 数据库网络地址(在本机上推荐用 Unix Socket, 与下面二选一, 不用则留空)
 // 例: localhost(可解析主机名), 127.0.0.1(IP 地址), 127.0.0.1:4406(含端口)
-$_ENV['db_host']     = '';
+$_ENV['db_host']      = '';
 // 数据库 Unix Socket 地址(优先级高于网络地址, 与上面二选一, 不用则留空)
 // 例: /var/run/mysqld/mysqld.sock(绝对地址)
-$_ENV['db_socket']   = '';
-$_ENV['db_database'] = 'sspanel';           //数据库名
-$_ENV['db_username'] = 'root';              //数据库用户名
-$_ENV['db_password'] = 'sspanel';           //用户名对应的密码
+$_ENV['db_socket']    = '';
+$_ENV['db_database']  = 'sspanel';           //数据库名
+$_ENV['db_username']  = 'root';              //数据库用户名
+$_ENV['db_password']  = 'sspanel';           //用户名对应的密码
 #高级
 $_ENV['db_charset']   = 'utf8';
 $_ENV['db_collation'] = 'utf8_general_ci';
@@ -65,101 +70,102 @@ $_ENV['sendgrid_name']   = '';       //发件人名称
 
 
 //备份设置--------------------------------------------------------------------------------------------
-$_ENV['auto_backup_email']  = '';       //接收备份的邮箱
-$_ENV['auto_backup_passwd'] = '';       //备份的压缩密码
-$_ENV['backup_notify']      = false;    //备份通知到TG群中
+$_ENV['auto_backup_email']  = '';                               //接收备份的邮箱
+$_ENV['auto_backup_passwd'] = '';                               //备份的压缩密码
+$_ENV['backup_notify']      = false;                            //备份通知到TG群中
 
 
 //用户注册设置-----------------------------------------------------------------------------------------
-$_ENV['register_mode'] = 'open';                //注册模式。close：关闭，open：开放，invite：仅限邀请码
+$_ENV['register_mode']             = 'open';                    //注册模式。close：关闭，open：开放，invite：仅限邀请码
 
-$_ENV['user_expire_in_default']    = 3650;      //用户账户过期时间，在注册时设置（天）
-$_ENV['user_class_expire_default'] = 24;        //用户等级过期时间，在注册时设置（小时）
+$_ENV['user_expire_in_default']    = 3650;                      //用户账户过期时间，在注册时设置（天）
+$_ENV['user_class_expire_default'] = 24;                        //用户等级过期时间，在注册时设置（小时）
 
-$_ENV['defaultTraffic']           = 1;          //用户初始流量 单位GB
-$_ENV['user_class_default']       = 0;          //用户注册等级，在注册时设置
-$_ENV['user_conn']                = 0;          //用户注册客户端数量限制，0为不限制
-$_ENV['user_speedlimit']          = 0;          //用户注册速度默认限制，0为不限制
-$_ENV['reg_auto_reset_day']       = 0;          //注册时的流量重置日，0为不重置
-$_ENV['reg_auto_reset_bandwidth'] = 0;          //需要重置的流量，0为不重置
-$_ENV['ramdom_group']             = 0;          //注册时随机分组，注册时随机分配到的分组，多个分组请用英文半角逗号分隔
+$_ENV['defaultTraffic']            = 1;                         //用户初始流量 单位GB
+$_ENV['user_class_default']        = 0;                         //用户注册等级，在注册时设置
+$_ENV['user_conn']                 = 0;                         //用户注册客户端数量限制，0为不限制
+$_ENV['user_speedlimit']           = 0;                         //用户注册速度默认限制，0为不限制
+$_ENV['reg_auto_reset_day']        = 0;                         //注册时的流量重置日，0为不重置
+$_ENV['reg_auto_reset_bandwidth']  = 0;                         //需要重置的流量，0为不重置
+$_ENV['ramdom_group']              = 0;                         //注册时随机分组，注册时随机分配到的分组，多个分组请用英文半角逗号分隔
 
-$_ENV['reg_method']         = 'chacha20-ietf';          //注册时默认加密方式
-$_ENV['reg_protocol']       = 'auth_aes128_sha1';       //注册时默认协议
-$_ENV['reg_protocol_param'] = '';                       //注册时默认协议参数
-$_ENV['reg_obfs']           = 'http_simple';            //注册时默认混淆方式
-$_ENV['reg_obfs_param']     = '';                       //注册时默认混淆参数 设置单端口后 这边必须配置！填写www.jd.hk就行
+$_ENV['reg_method']                = 'chacha20-ietf';           //注册时默认加密方式
+$_ENV['reg_protocol']              = 'auth_aes128_sha1';        //注册时默认协议
+$_ENV['reg_protocol_param']        = '';                        //注册时默认协议参数
+$_ENV['reg_obfs']                  = 'http_simple';             //注册时默认混淆方式
+$_ENV['reg_obfs_param']            = '';                        //注册时默认混淆参数 设置单端口后 这边必须配置！填写www.jd.hk就行
 
-$_ENV['reg_forbidden_ip']   = '127.0.0.0/8,::1/128';    //注册时默认禁止访问IP列表，半角英文逗号分割
-$_ENV['min_port']           = 10000;                    //用户端口池最小值
-$_ENV['max_port']           = 65535;                    //用户端口池最大值
-$_ENV['reg_forbidden_port'] = '';                       //注册时默认禁止访问端口列表，半角英文逗号分割，支持端口段
+$_ENV['reg_forbidden_ip']          = '127.0.0.0/8,::1/128';     //注册时默认禁止访问IP列表，半角英文逗号分割
+$_ENV['min_port']                  = 10000;                     //用户端口池最小值
+$_ENV['max_port']                  = 65535;                     //用户端口池最大值
+$_ENV['reg_forbidden_port']        = '';                        //注册时默认禁止访问端口列表，半角英文逗号分割，支持端口段
 
-$_ENV['mu_suffix'] = 'microsoft.com';           //单端口多用户混淆参数后缀，可以随意修改，但请保持前后端一致
-$_ENV['mu_regex']  = '%5m%id.%suffix';          //单端口多用户混淆参数表达式，%5m代表取用户特征 md5 的前五位，%id 代表用户id, %suffix 代表上面这个后缀。
+$_ENV['mu_suffix']                 = 'microsoft.com';           //单端口多用户混淆参数后缀，可以随意修改，但请保持前后端一致
+$_ENV['mu_regex']                  = '%5m%id.%suffix';          //单端口多用户混淆参数表达式，%5m代表取用户特征 md5 的前五位，%id 代表用户id, %suffix 代表上面这个后缀。
 
 #邀请链接
-$_ENV['inviteNum']           = 10;          //注册后的邀请链接可用次数
-$_ENV['invite_get_money']    = 1;           //新用户通过私人邀请链接注册时，获得奖励金额（作为初始资金）
-$_ENV['invite_price']        = -1;          //用户购买邀请码所需要的价格，价格小于0时视为不开放购买
-$_ENV['custom_invite_price'] = -1;          //用户定制邀请码所需要的价格，价格小于0时视为不开放购买
+$_ENV['inviteNum']                 = 10;                        //注册后的邀请链接可用次数
+$_ENV['invite_get_money']          = 1;                         //新用户通过私人邀请链接注册时，获得奖励金额（作为初始资金）
+$_ENV['invite_price']              = -1;                        //用户购买邀请码所需要的价格，价格小于0时视为不开放购买
+$_ENV['custom_invite_price']       = -1;                        //用户定制邀请码所需要的价格，价格小于0时视为不开放购买
 
 #邮箱验证
-$_ENV['enable_email_verify']  = false;       //是否启用注册邮箱验证码
-$_ENV['email_verify_ttl']     = 3600;        //邮箱验证码有效期
-$_ENV['email_verify_iplimit'] = 10;          //验证码有效期内，单IP可请求验证码次数
+$_ENV['enable_email_verify']       = false;                     //是否启用注册邮箱验证码
+$_ENV['email_verify_ttl']          = 3600;                      //邮箱验证码有效期
+$_ENV['email_verify_iplimit']      = 10;                        //验证码有效期内，单IP可请求验证码次数
 
 
 //已注册用户设置---------------------------------------------------------------------------------------
 #基础
-$_ENV['checkinMin'] = 1;            //用户签到最少流量 单位MB
-$_ENV['checkinMax'] = 50;           //用户签到最多流量
+$_ENV['checkinMin']                 = 1;            //用户签到最少流量 单位MB
+$_ENV['checkinMax']                 = 50;           //用户签到最多流量
 
-$_ENV['auto_clean_uncheck_days'] = -1;      //自动清理多少天没签到的0级用户，小于等于0时关闭
-$_ENV['auto_clean_unused_days']  = -1;      //自动清理多少天没使用的0级用户，小于等于0时关闭
-$_ENV['auto_clean_min_money']    = 1;       //余额低于多少的0级用户可以被清理
+$_ENV['auto_clean_uncheck_days']    = -1;      //自动清理多少天没签到的0级用户，小于等于0时关闭
+$_ENV['auto_clean_unused_days']     = -1;      //自动清理多少天没使用的0级用户，小于等于0时关闭
+$_ENV['auto_clean_min_money']       = 1;       //余额低于多少的0级用户可以被清理
 
-$_ENV['code_payback'] = 20;                 //充值返利百分比
-$_ENV['invite_gift']  = 2;                  //邀请新用户获得流量奖励，单位G
+$_ENV['code_payback']               = 20;                 //充值返利百分比
+$_ENV['invite_gift']                = 2;                  //邀请新用户获得流量奖励，单位G
 
-$_ENV['enable_bought_reset']  = true;       //购买时是否重置流量
-$_ENV['enable_bought_extend'] = true;       //购买时是否延长等级期限（同等级配套）
+$_ENV['enable_bought_reset']        = true;       //购买时是否重置流量
+$_ENV['enable_bought_extend']       = true;       //购买时是否延长等级期限（同等级配套）
 
-$_ENV['port_price']         = -1;           //用户随机重置端口所需要的价格，价格小于0时视为不开放购买
-$_ENV['port_price_specify'] = -1;           //用户指明钦定端口所需要的价格，价格小于0时视为不开放购买
+$_ENV['port_price']                 = -1;           //用户随机重置端口所需要的价格，价格小于0时视为不开放购买
+$_ENV['port_price_specify']         = -1;           //用户指明钦定端口所需要的价格，价格小于0时视为不开放购买
 
 #高级
 $_ENV['class_expire_reset_traffic'] = 0;    //等级到期时重置为的流量值，单位GB，小于0时不重置
 $_ENV['account_expire_delete_days'] = -1;   //账户到期几天之后会删除账户，小于0时不删除
 
-$_ENV['enable_kill'] = true;                //是否允许用户注销账户
+$_ENV['enable_kill']                = true;                //是否允许用户注销账户
 
 #用户流量余量不足邮件提醒
-$_ENV['notify_limit_mode']  = true;         //false为关闭，per为按照百分比提醒，mb为按照固定剩余流量提醒
-$_ENV['notify_limit_value'] = 20;           //当上一项为per时，此处填写百分比；当上一项为mb时，此处填写流量
+$_ENV['notify_limit_mode']          = true;         //false为关闭，per为按照百分比提醒，mb为按照固定剩余流量提醒
+$_ENV['notify_limit_value']         = 20;           //当上一项为per时，此处填写百分比；当上一项为mb时，此处填写流量
 
 
 //订阅设置---------------------------------------------------------------------------------------
-$_ENV['mergeSub'] = true;                //合并订阅设置 可选项 false / true
-$_ENV['add_emoji_to_node_name'] = false;  //为部分订阅中默认添加 emoji
-$_ENV['enable_sub_extend'] = true;      // 是否开启订阅中默认显示流量剩余以及账户到期时间以及 sub_message 中的信息
+$_ENV['subUrl']                 = $_ENV['baseUrl'] . '/link/';  //订阅地址，如需和站点名称相同，请不要修改
+$_ENV['mergeSub']               = true;                         //合并订阅设置 可选项 false / true
+$_ENV['add_emoji_to_node_name'] = false;                        //为部分订阅中默认添加 emoji
+$_ENV['enable_sub_extend']      = true;                         // 是否开启订阅中默认显示流量剩余以及账户到期时间以及 sub_message 中的信息
 
 // 订阅中的营销信息
 // 使用数组形式，将会添加在订阅列表的顶端
 // 可用于为用户推送最新地址等信息，尽可能简短且数量不宜太多
-$_ENV['sub_message']       = [];
+$_ENV['sub_message']            = [];
 
-$_ENV['disable_sub_mu_port'] = false;   // 将订阅中单端口的信息去除
+$_ENV['disable_sub_mu_port']    = false;                        // 将订阅中单端口的信息去除
 
-$_ENV['subscribeLog'] = false;			    //是否记录用户订阅日志
-$_ENV['subscribeLog_keep_days'] = 7;		    //订阅记录保留天数
+$_ENV['subscribeLog']           = false;			            //是否记录用户订阅日志
+$_ENV['subscribeLog_keep_days'] = 7;		                    //订阅记录保留天数
 
-$_ENV['mu_port_migration'] = false;       //为后端直接下发偏移后的端口
-$_ENV['add_emoji_to_node_name'] = false;  //为部分订阅中默认添加 emoji
-$_ENV['add_appName_to_ss_uri'] = true;    //为 SS 节点名称中添加站点名
+$_ENV['mu_port_migration']      = false;                        //为后端直接下发偏移后的端口
+$_ENV['add_emoji_to_node_name'] = false;                        //为部分订阅中默认添加 emoji
+$_ENV['add_appName_to_ss_uri']  = true;                         //为 SS 节点名称中添加站点名
 
-$_ENV['subscribe_client'] = true;        //下载协议客户端时附带节点和订阅信息
-$_ENV['subscribe_client_url'] = '';       //使用独立的服务器提供附带节点和订阅信息的协议客户端下载，为空表示不使用
+$_ENV['subscribe_client']       = true;                         //下载协议客户端时附带节点和订阅信息
+$_ENV['subscribe_client_url']   = '';                           //使用独立的服务器提供附带节点和订阅信息的协议客户端下载，为空表示不使用
 
 
 //审计自动封禁设置--------------------------------------------------------------------------------------------
