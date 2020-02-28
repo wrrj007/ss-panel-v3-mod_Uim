@@ -1,15 +1,9 @@
 <?php
 
 /**
- * 部分应用自定义配置
+ * 应用自定义配置
  *
  * PHP version 7.2+
- *
- * @category GeekQu
- * @package  App/Controllers/ConfController
- * @author   GeekQu <iloves@live.com>
- * @license  MIT https://github.com/GeekQu/ss-panel-v3-mod_Uim/blob/dev/LICENSE
- * @link     https://github.com/GeekQu
  */
 
 namespace App\Controllers;
@@ -23,9 +17,6 @@ use Symfony\Component\Yaml\Exception\ParseException;
  *
  * @category GeekQu
  * @package  App/Controllers/ConfController
- * @author   GeekQu <iloves@live.com>
- * @license  MIT https://github.com/GeekQu/ss-panel-v3-mod_Uim/blob/dev/LICENSE
- * @link     https://github.com/GeekQu
  */
 class ConfController extends BaseController
 {
@@ -35,7 +26,7 @@ class ConfController extends BaseController
      * @param array $Proxy 节点
      * @param array $Rule  匹配规则
      *
-     * @return array
+     * @return array|null
      */
     public static function getMatchProxy($Proxy, $Rule)
     {
@@ -80,7 +71,7 @@ class ConfController extends BaseController
      *
      * @param string $Content YAML 字符串
      *
-     * @return string
+     * @return array|string
      */
     public static function YAML2Array($Content)
     {
@@ -105,9 +96,7 @@ class ConfController extends BaseController
     {
         $General = (isset($Configs['General']) ? self::getSurgeConfGeneral($Configs['General']) : '');
 
-        $Proxys = (isset($Configs['Proxy'])
-            ? self::getSurgeConfProxy($Configs['Proxy'])
-            : '');
+        $Proxys = (isset($Configs['Proxy']) ? self::getSurgeConfProxy($Configs['Proxy']) : '');
 
         if (isset($Configs['Proxy Group'])) {
             //兼容
@@ -128,7 +117,7 @@ class ConfController extends BaseController
             '#---------------------------------------------------#',
             '## 上次更新于：' . date("Y-m-d h:i:s"),
             '#---------------------------------------------------#',
-            PHP_EOL,
+            '',
             '[General]',
             $General,
             '',
@@ -158,7 +147,7 @@ class ConfController extends BaseController
         $return = '';
         if (count($General) != 0) {
             foreach ($General as $key => $value) {
-                $return .= PHP_EOL . $key . ' = ' . $value;
+                $return .= $key . ' = ' . $value . PHP_EOL;
             }
         }
         return $return;
@@ -177,7 +166,7 @@ class ConfController extends BaseController
         if (count($Proxys) != 0) {
             foreach ($Proxys as $value) {
                 if (!preg_match('/(\[General|Replica|Proxy|Proxy\sGroup|Rule|Host|URL\sRewrite|Header\sRewrite|MITM|Script\])/', $value)) {
-                    $return .= PHP_EOL . $value;
+                    $return .= $value . PHP_EOL;
                 }
             }
         }
@@ -310,7 +299,7 @@ class ConfController extends BaseController
             } else {
                 $str .= '';
             }
-            $return .= PHP_EOL . $str;
+            $return .= $str . PHP_EOL;
         }
         return $return;
     }
@@ -449,18 +438,6 @@ class ConfController extends BaseController
         }
 
         return $newProxyGroups;
-    }
-
-    /**
-     * Clash ProxyGroup 转字符串
-     *
-     * @param array $ProxyGroups ProxyGroup
-     *
-     * @return string
-     */
-    public static function getClashProxyGroup2String($ProxyGroups)
-    {
-        return Yaml::dump($ProxyGroups, 4, 2);
     }
 
     /**

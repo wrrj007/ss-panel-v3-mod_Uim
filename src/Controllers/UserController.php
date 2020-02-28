@@ -44,6 +44,7 @@ use App\Utils\{
     Cookie,
     Geetest,
     Telegram,
+    ClientProfiles,
     DatatablesHelper,
     TelegramSessionManager
 };
@@ -1819,33 +1820,26 @@ class UserController extends BaseController
         $client_path = BASE_PATH . '/resources/clients/';
         switch ($type) {
             case 'ss-win':
-                $temp_file_path .= $type . '_' . $user_token . '.zip';
                 $user_config_file_name = 'gui-config.json';
-                $content = LinkController::getSSPcConf($this->user);
-                $client_path .= $type . '/';
+                $content = ClientProfiles::getSSPcConf($this->user);
                 break;
             case 'ssd-win':
-                $temp_file_path .= $type . '_' . $user_token . '.zip';
                 $user_config_file_name = 'gui-config.json';
-                $content = LinkController::getSSDPcConf($this->user);
-                $client_path .= $type . '/';
+                $content = ClientProfiles::getSSDPcConf($this->user);
                 break;
             case 'ssr-win':
-                $temp_file_path .= $type . '_' . $user_token . '.zip';
                 $user_config_file_name = 'gui-config.json';
-                $content = LinkController::getSSRPcConf($this->user);
-                $client_path .= $type . '/';
+                $content = ClientProfiles::getSSRPcConf($this->user);
                 break;
             case 'v2rayn-win':
-                $temp_file_path .= $type . '_' . $user_token . '.zip';
                 $user_config_file_name = 'guiNConfig.json';
-                $content = LinkController::getV2RayNPcConf($this->user);
-                $client_path .= $type . '/';
+                $content = ClientProfiles::getV2RayNPcConf($this->user);
                 break;
-
             default:
                 return 'gg';
         }
+        $temp_file_path .= $type . '_' . $user_token . '.zip';
+        $client_path .= $type . '/';
         // 文件存在则先删除
         if (is_file($temp_file_path)) {
             unlink($temp_file_path);
@@ -1878,6 +1872,6 @@ class UserController extends BaseController
             return null;
         }
         $this->user = $user;
-        return self::getPcClient($request, $response, $args);
+        return $this->getPcClient($request, $response, $args);
     }
 }

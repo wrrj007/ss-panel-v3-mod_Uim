@@ -213,7 +213,7 @@ class HomeController extends BaseController
      * @param Response  $response
      * @param array     $args
      */
-    public function getDocCenter($request, $response, $args)
+    public function getDocCenter($request, $response, $args): ResponseInterface
     {
         $user = Auth::getUser();
         if (!$user->isLogin && $_ENV['enable_documents'] === false) {
@@ -228,7 +228,7 @@ class HomeController extends BaseController
      * @param Response  $response
      * @param array     $args
      */
-    public function getSubLink($request, $response, $args)
+    public function getSubLink($request, $response, $args): string
     {
         $type = trim($request->getParam('type'));
         $user = Auth::getUser();
