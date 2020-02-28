@@ -60,7 +60,7 @@ class MenuCommand extends Command
                 return;
             }
 
-            $reply = \App\Utils\Telegram\Callbacks\UserCallback::getUserIndexKeyboard($user);
+            $reply = \App\Utils\Telegram\Callbacks\Callback::getUserIndexKeyboard($user);
 
             // 回送信息
             return $this->replyWithMessage(

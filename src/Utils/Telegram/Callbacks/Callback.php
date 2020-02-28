@@ -225,9 +225,12 @@ class Callback
         $this->replyWithMessage($sendMessage);
     }
 
-    public function getUserIndexKeyboard()
+    public static function getUserIndexKeyboard($user = null)
     {
-        $checkin = (!$this->User->isAbleToCheckin() ? '已签到' : '签到');
+        if ($user == null) {
+            $user = $this->User;
+        }
+        $checkin = (!$user->isAbleToCheckin() ? '已签到' : '签到');
         $Keyboard = [
             [
                 [
@@ -252,15 +255,15 @@ class Callback
             [
                 [
                     'text'          => $checkin,
-                    'callback_data' => 'user.checkin.' . $this->User->telegram_id
+                    'callback_data' => 'user.checkin.' . $user->telegram_id
                 ],
             ],
         ];
-        $text  = Reply::getUserTitle($this->User);
+        $text  = Reply::getUserTitle($user);
         $text .= PHP_EOL . PHP_EOL;
-        $text .= Reply::getUserInfo($this->User);
+        $text .= Reply::getUserInfo($user);
         $text .= PHP_EOL;
-        $text .= '流量重置时间：' . $this->User->valid_use_loop();
+        $text .= '流量重置时间：' . $user->valid_use_loop();
         if ($_ENV['show_group_link'] === true) {
             $Keyboard[] = [
                 [
@@ -326,7 +329,7 @@ class Callback
                 break;
             default:
                 // 用户首页
-                $temp = $this->getUserIndexKeyboard();
+                $temp = self::getUserIndexKeyboard($this->User);
                 $this->replyWithMessage([
                     'text'                     => $temp['text'],
                     'parse_mode'               => 'HTML',
@@ -1242,7 +1245,7 @@ class Callback
         ]);
         // 回送信息
         if ($this->ChatID > 0) {
-            $temp = $this->getUserIndexKeyboard();
+            $temp = self::getUserIndexKeyboard($this->User);
         } else {
             $temp['text']     = Reply::getUserTitle($this->User);
             $temp['text']    .= PHP_EOL . PHP_EOL;

@@ -167,7 +167,7 @@ class LinkController extends BaseController
                         $user,
                         $response,
                         $content,
-                        $filename,
+                        $filename
                     );
                     break;
                 }

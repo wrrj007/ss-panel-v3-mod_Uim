@@ -103,7 +103,7 @@ class ConfController extends BaseController
      */
     public static function getSurgeConfs($User, $AllProxys, $Nodes, $Configs)
     {
-        $General = self::getSurgeConfGeneral($Configs['General']);
+        $General = (isset($Configs['General']) ? self::getSurgeConfGeneral($Configs['General']) : '');
 
         $Proxys = (isset($Configs['Proxy'])
             ? self::getSurgeConfProxy($Configs['Proxy'])
@@ -326,7 +326,7 @@ class ConfController extends BaseController
      */
     public static function getClashConfs($User, $AllProxys, $Configs)
     {
-        if (isset($Configs['Proxy']) || count($Configs['Proxy']) != 0) {
+        if (isset($Configs['Proxy']) && count($Configs['Proxy']) != 0) {
             $tmpProxys = array_merge($AllProxys, $Configs['Proxy']);
         } else {
             $tmpProxys = $AllProxys;
