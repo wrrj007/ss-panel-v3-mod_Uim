@@ -1770,16 +1770,16 @@ class UserController extends BaseController
         $return = '';
         switch ($type) {
             case 'ss':
-                $return .= URL::getAllUrl($user, 0, 1) . PHP_EOL;
+                $return .= URL::get_NewAllUrl($user, ['type' => 'ss']) . PHP_EOL;
                 break;
             case 'ssr':
-                $return .= URL::getAllUrl($user, 0, 0) . PHP_EOL;
+                $return .= URL::get_NewAllUrl($user, ['type' => 'ssr']) . PHP_EOL;
                 break;
             case 'ssd':
-                $return .= LinkController::getSSD($user, 1, [], ['type' => 'ss', 'is_mu' => 1], false) . PHP_EOL;
+                $return .= LinkController::getSSD($user, 1, [], ['type' => 'ss']) . PHP_EOL;
                 break;
             case 'v2ray':
-                $return .= URL::getAllVMessUrl($user) . PHP_EOL;
+                $return .= URL::get_NewAllUrl($user, ['type' => 'vmess']) . PHP_EOL;
                 break;
             default:
                 $return .= '悟空别闹！';

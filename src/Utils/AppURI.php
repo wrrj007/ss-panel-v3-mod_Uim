@@ -6,6 +6,51 @@ use App\Services\Config;
 
 class AppURI
 {
+    public static function getItemUrl($item, $is_ss)
+    {
+        $ss_obfs_list = Config::getSupportParam('ss_obfs');
+        if (!$is_ss) {
+            $ssurl = $item['address'] . ':' . $item['port'] . ':' . $item['protocol'] . ':' . $item['method'] . ':' . $item['obfs'] . ':' . Tools::base64_url_encode($item['passwd'])
+                . '/?obfsparam=' . Tools::base64_url_encode($item['obfs_param'])
+                . '&protoparam=' . Tools::base64_url_encode($item['protocol_param'])
+                . '&remarks=' . Tools::base64_url_encode($item['remark'])
+                . '&group=' . Tools::base64_url_encode($item['group']);
+
+            return 'ssr://' . Tools::base64_url_encode($ssurl);
+        }
+
+        if ($is_ss == 2) {
+            $personal_info = $item['method'] . ':' . $item['passwd'] . '@' . $item['address'] . ':' . $item['port'];
+            $ssurl = 'ss://' . Tools::base64_url_encode($personal_info);
+            $ssurl .= ($_ENV['add_appName_to_ss_uri'] === true
+                ? '#' . rawurlencode($_ENV['appName'] . ' - ' . $item['remark'])
+                : '#' . rawurlencode($item['remark']));
+        } else {
+            $personal_info = $item['method'] . ':' . $item['passwd'];
+            $ssurl = 'ss://' . Tools::base64_url_encode($personal_info) . '@' . $item['address'] . ':' . $item['port'];
+            $plugin = '';
+            if ($item['obfs'] == 'v2ray' || in_array($item['obfs'], $ss_obfs_list)) {
+                if (strpos($item['obfs'], 'http') !== false) {
+                    $plugin .= 'obfs-local;obfs=http';
+                } elseif (strpos($item['obfs'], 'tls') !== false) {
+                    $plugin .= 'obfs-local;obfs=tls';
+                } else {
+                    $plugin .= 'v2ray;' . $item['obfs_param'];
+                }
+                if ($item['obfs_param'] != '' && $item['obfs'] != 'v2ray') {
+                    $plugin .= ';obfs-host=' . $item['obfs_param'];
+                }
+                $ssurl .= '/?plugin=' . rawurlencode($plugin) . '&group=' . Tools::base64_url_encode($_ENV['appName']);
+            } else {
+                $ssurl .= '/?group=' . Tools::base64_url_encode($_ENV['appName']);
+            }
+            $ssurl .= ($_ENV['add_appName_to_ss_uri'] === true
+                ? '#' . rawurlencode($_ENV['appName'] . ' - ' . $item['remark'])
+                : '#' . rawurlencode($item['remark']));
+        }
+        return $ssurl;
+    }
+
     public static function getSurgeURI($item, $version)
     {
         $return = null;
@@ -275,7 +320,7 @@ class AppURI
         switch ($item['type']) {
             case 'ss':
                 if (in_array($item['obfs'], Config::getSupportParam('ss_obfs'))) {
-                    $return = (URL::getItemUrl($item, 1));
+                    $return = (self::getItemUrl($item, 1));
                 } else {
                     if ($item['obfs'] == 'v2ray') {
                         $v2rayplugin = [
@@ -289,12 +334,12 @@ class AppURI
                         $return = ('ss://' . Tools::base64_url_encode($item['method'] . ':' . $item['passwd'] . '@' . $item['address'] . ':' . $item['port']) . '?v2ray-plugin=' . base64_encode(json_encode($v2rayplugin)) . '#' . rawurlencode($item['remark']));
                     }
                     if ($item['obfs'] == 'plain') {
-                        $return = (URL::getItemUrl($item, 2));
+                        $return = (self::getItemUrl($item, 2));
                     }
                 }
                 break;
             case 'ssr':
-                $return = (URL::getItemUrl($item, 0));
+                $return = (self::getItemUrl($item, 0));
                 break;
             case 'vmess':
                 if (!in_array($item['net'], ['tcp', 'ws', 'http', 'h2'])) {
@@ -325,7 +370,7 @@ class AppURI
                 $tls = '';
                 if ($item['tls'] == 'tls') {
                     $tls = '&tls=1';
-                    if ($item['verify_cert'] == false){
+                    if ($item['verify_cert'] == false) {
                         $tls .= '&allowInsecure=1';
                     }
                     if (isset($item['localserver'])) {
@@ -346,7 +391,7 @@ class AppURI
                 if (in_array($item['obfs'], ['v2ray', 'simple_obfs_http', 'simple_obfs_tls'])) {
                     break;
                 }
-                $return = (URL::getItemUrl($item, 2));
+                $return = (self::getItemUrl($item, 2));
                 break;
             case 'vmess':
                 $network = ($item['net'] == 'tls'

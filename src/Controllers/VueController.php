@@ -96,11 +96,11 @@ class VueController extends BaseController
         }
 
         $pre_user = URL::cloneUser($user);
-        $user->ssr_url_all = URL::getAllUrl($pre_user, 0, 0);
-        $user->ssr_url_all_mu = URL::getAllUrl($pre_user, 1, 0);
-        $user->ss_url_all = URL::getAllUrl($pre_user, 0, 2);
+        $user->ssr_url_all = URL::get_NewAllUrl($pre_user, ['type' => 'ssr']);
+        $user->ssr_url_all_mu = URL::get_NewAllUrl($pre_user, ['type' => 'ssr', 'is_mu' => 1]);
+        $user->ss_url_all = URL::get_NewAllUrl($pre_user, ['type' => 'ss']);
         $ssinfo = URL::getSSConnectInfo($pre_user);
-        $user->ssd_url_all = URL::getAllSSDUrl($ssinfo);
+        $user->ssd_url_all = LinkController::getSSD($ssinfo, 1, [], ['type' => 'ss']);
         $user->isAbleToCheckin = $user->isAbleToCheckin();
         $ssr_sub_token = LinkController::GenerateSSRSubCode($this->user->id, 0);
         $GtSdk = null;

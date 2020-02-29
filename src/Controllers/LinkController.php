@@ -484,10 +484,10 @@ class LinkController extends BaseController
         $return = null;
         switch ($list) {
             case 'ss':
-                $return = URL::getItemUrl($item, 1);
+                $return = AppURI::getItemUrl($item, 1);
                 break;
             case 'ssr':
-                $return = URL::getItemUrl($item, 0);
+                $return = AppURI::getItemUrl($item, 0);
                 break;
             case 'ssa':
                 $return = AppURI::getSSJSON($item);
