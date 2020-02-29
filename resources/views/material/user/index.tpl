@@ -393,6 +393,44 @@ table tr td:first-child {
 												</ul>
 											</nav>
 
+
+                                            {function name=printClient items=null}
+                                                {foreach $items as $item}
+                                                    <hr/>
+												    <p><span class="icon icon-lg text-white">filter_9_plus</span> {$item['name']} - [ {$item['support']} ]：</p>
+													<p>
+                                                        应用下载：
+                                                        {foreach $item['download_urls'] as $download_url}
+                                                        {if !$download_url@first}.{/if}
+                                                        <a class="btn-dl" href="{$download_url['url']}"><i class="material-icons icon-sm">cloud_download</i> {$download_url['name']}</a>
+                                                        {/foreach}
+                                                    </p>
+													<p>
+                                                        使用教程：
+                                                        <a class="btn-dl" href="{$item['tutorial_url']}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                    </p>
+                                                    {if isset($item['description'])}
+													<p>
+                                                        相关说明：
+                                                        {$item['description']}
+                                                    </p>
+                                                    {/if}
+													<p>
+                                                        使用方式：
+                                                    {foreach $item['subscribe_urls'] as $subscribe_url}
+                                                        {if !$subscribe_url@first}.{/if}
+                                                        {$url=$subscribe_url['url']|replace:'%userUrl%':$subInfo['link']}
+                                                        {if $subscribe_url['type'] == 'href'}
+                                                        <a class="btn-dl" href="{$url}"><i class="material-icons icon-sm">send</i> {$subscribe_url['name']}</a>
+                                                        {else}
+                                                        <a class="copy-text btn-dl" data-clipboard-text="{$url}"><i class="material-icons icon-sm">send</i> {$subscribe_url['name']}</a>
+                                                        {/if}
+                                                    {/foreach}
+                                                    </p>
+                                                {/foreach}
+                                            {/function}
+
+
 											<div class="tab-pane fade active in" id="sub_center_general">
 												<p>此处为通用订阅，适用于多种应用的订阅，如您使用的客户端不在各平台列举的名单中则在此使用订阅服务.</p>
                                                 <hr/>
@@ -531,6 +569,9 @@ table tr td:first-child {
                                                         .
                                                         <a class="btn-dl" href="clash://install-config?url={urlencode($subInfo['clashr'])}"><i class="material-icons icon-sm">send</i> 配置一键导入</a>
                                                     </p>
+                                            {if count($config['userCenterClient']['Windows']) != 0}
+                                                {printClient items=$config['userCenterClient']['Windows']}
+                                            {/if}
 											</div>
 
 											<div class="tab-pane fade" id="sub_center_mac">
@@ -629,6 +670,9 @@ table tr td:first-child {
                                                         使用方式：
                                                         <a class="copy-text btn-dl" data-clipboard-text="{$subInfo['ssr']}"><i class="material-icons icon-sm">send</i> 拷贝订阅链接</a>
                                                     </p>
+                                            {if count($config['userCenterClient']['macOS']) != 0}
+                                                {printClient items=$config['userCenterClient']['macOS']}
+                                            {/if}
 											</div>
 
 											<div class="tab-pane fade" id="sub_center_ios">
@@ -754,6 +798,9 @@ table tr td:first-child {
                                                         .
                                                         <a class="btn-dl" onclick=AddSub("{$subInfo['shadowrocket']}","sub://")><i class="material-icons icon-sm">send</i> 拷贝该应用专属订阅链接</a>
                                                     </p>
+                                            {if count($config['userCenterClient']['iOS']) != 0}
+                                                {printClient items=$config['userCenterClient']['iOS']}
+                                            {/if}
 											</div>
 
 											<div class="tab-pane fade" id="sub_center_android">
@@ -865,6 +912,9 @@ table tr td:first-child {
                                                         .
                                                         <a class="copy-text btn-dl" data-clipboard-text="{$subInfo['kitsunebi']}"><i class="material-icons icon-sm">send</i> 拷贝该应用专属订阅链接</a>
                                                     </p>
+                                            {if count($config['userCenterClient']['Android']) != 0}
+                                                {printClient items=$config['userCenterClient']['Android']}
+                                            {/if}
 											</div>
 
 											<div class="tab-pane fade" id="sub_center_linux">
@@ -881,6 +931,9 @@ table tr td:first-child {
                                                         使用方式：
                                                         <a class="copy-text btn-dl" data-clipboard-text="{$subInfo['ssr']}"><i class="material-icons icon-sm">send</i> 拷贝订阅链接</a>
                                                     </p>
+                                            {if count($config['userCenterClient']['Linux']) != 0}
+                                                {printClient items=$config['userCenterClient']['Linux']}
+                                            {/if}
 											</div>
 
 											<div class="tab-pane fade" id="sub_center_router">
@@ -901,6 +954,9 @@ table tr td:first-child {
                                                         .
                                                         <a class="copy-text btn-dl" data-clipboard-text="{$subInfo['v2ray']}"><i class="material-icons icon-sm">send</i> 拷贝 V2Ray 订阅链接</a>
                                                     </p>
+                                            {if count($config['userCenterClient']['Router']) != 0}
+                                                {printClient items=$config['userCenterClient']['Router']}
+                                            {/if}
 											</div>
 
 										</div>

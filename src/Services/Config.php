@@ -78,7 +78,7 @@ class Config
             'remote_documents'      => $_ENV['remote_documents'],
             'documents_source'      => $_ENV['documents_source'],
 
-
+            'userCenterClient'      => $_ENV['userCenterClient']
         ];
     }
 

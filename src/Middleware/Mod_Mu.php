@@ -33,7 +33,7 @@ class Mod_Mu
             ]);
         }
 
-        if ($_ENV['mainWebapi'] === false) {
+        if ($_ENV['Webapi'] === false) {
             // 主站不提供 Webapi
             return $response->withJson([
                 'ret'  => 0,
