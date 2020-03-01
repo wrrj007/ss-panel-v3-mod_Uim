@@ -934,6 +934,8 @@ class Job
                     $user_logs[$log->user_id] = 0;
                 }
                 $user_logs[$log->user_id]++;
+                $log->status = 1;
+                $log->save();
             }
 
             foreach ($user_logs as $userid => $value) {
