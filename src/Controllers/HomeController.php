@@ -220,7 +220,7 @@ class HomeController extends BaseController
             $response = $response->withStatus(302)->withHeader('Location', '/');
             return $response;
         }
-        return $this->view()->fetch('doc/index.tpl');
+        return $response->write($this->view()->fetch('doc/index.tpl'));
     }
 
     /**
