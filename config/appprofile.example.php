@@ -65,7 +65,7 @@ $_ENV['Surge_Profiles'] = [
             ]
         ],
         'Rule' => [
-            'source' => 'surge/default.conf'
+            'source' => 'surge/default.tpl'
         ]
     ]
 ];
@@ -134,7 +134,7 @@ Apple = select,DIRECT,PROXY
             ]
         ],
         'Rule' => [
-            'source' => 'surge2/default.conf'
+            'source' => 'surge2/default.tpl'
         ]
     ]
 ];
@@ -191,7 +191,7 @@ $_ENV['Clash_Profiles'] = [
             ]
         ],
         'Rule' => [
-            'source' => 'clash/default.conf'
+            'source' => 'clash/default.tpl'
         ]
     ]
 ];
@@ -229,7 +229,7 @@ $_ENV['Surfboard_Profiles'] = [
             ]
         ],
         'Rule' => [
-            'source' => 'surfboard/default.conf'
+            'source' => 'surfboard/default.tpl'
         ]
     ]
 ];
