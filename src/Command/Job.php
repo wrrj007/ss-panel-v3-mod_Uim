@@ -2,37 +2,42 @@
 
 namespace App\Command;
 
-use App\Models\Node;
-use App\Models\User;
-use App\Models\RadiusBan;
-use App\Models\LoginIp;
-use App\Models\Speedtest;
-use App\Models\Shop;
-use App\Models\Bought;
-use App\Models\Ip;
-use App\Models\NodeInfoLog;
-use App\Models\NodeOnlineLog;
-use App\Models\TrafficLog;
-use App\Models\DetectLog;
-use App\Models\BlockIp;
-use App\Models\TelegramSession;
-use App\Models\EmailVerify;
-use App\Services\Config;
-use App\Utils\Radius;
-use App\Utils\Tools;
-use App\Services\Mail;
-use App\Utils\QQWry;
-use App\Utils\GA;
-use App\Utils\Telegram;
-use ArrayObject;
-use App\Models\Disconnect;
-use App\Models\UnblockIp;
-use App\Models\UserSubscribeLog;
-use App\Models\DetectBanLog;
-use App\Models\TelegramTasks;
-use App\Models\Token;
-use App\Models\GConfig;
+use App\Models\{
+    Ip,
+    Node,
+    User,
+    Shop,
+    Token,
+    Bought,
+    BlockIp,
+    LoginIp,
+    DetectLog,
+    UnblockIp,
+    Speedtest,
+    RadiusBan,
+    TrafficLog,
+    Disconnect,
+    EmailVerify,
+    DetectBanLog,
+    NodeInfoLog,
+    NodeOnlineLog,
+    TelegramTasks,
+    TelegramSession,
+    UserSubscribeLog
+};
+use App\Services\{
+    Mail,
+    Config
+};
+use App\Utils\{
+    GA,
+    QQWry,
+    Tools,
+    Radius,
+    Telegram
+};
 use Exception;
+use ArrayObject;
 use RuntimeException;
 
 class Job
@@ -184,8 +189,8 @@ class Job
 
             if ($shop->reset() != 0 && $shop->reset_value() != 0 && $shop->reset_exp() != 0) {
                 $boughted_users[] = $bought->userid;
-                if ((time() - $shop->reset_exp() * 86400 < $bought->datetime) && (int)((time() - $bought->datetime) / 86400) % $shop->reset() == 0 && (int)((time() - $bought->datetime) / 86400) != 0) {
-                    echo('流量重置-' . $user->id . "\n");
+                if ((time() - $shop->reset_exp() * 86400 < $bought->datetime) && (int) ((time() - $bought->datetime) / 86400) % $shop->reset() == 0 && (int) ((time() - $bought->datetime) / 86400) != 0) {
+                    echo ('流量重置-' . $user->id . "\n");
                     $user->transfer_enable = Tools::toGB($shop->reset_value());
                     $user->u = 0;
                     $user->d = 0;
@@ -199,8 +204,7 @@ class Job
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             'user' => $user,
                             'text' => $text
-                        ], [
-                        ]);
+                        ], []);
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }
@@ -230,8 +234,7 @@ class Job
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         'user' => $user,
                         'text' => $text
-                    ], [
-                    ]);
+                    ], []);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -377,8 +380,7 @@ class Job
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         'user' => $user,
                         'text' => $text
-                    ], [
-                    ]);
+                    ], []);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -441,8 +443,8 @@ class Job
 
         //节点掉线检测
         if ($_ENV['enable_detect_offline'] == true) {
+            echo '节点掉线检测开始' . PHP_EOL;
             $nodes = Node::all();
-
             foreach ($nodes as $node) {
                 if ($node->isNodeOnline() === false && $node->online == true) {
                     if ($_ENV['useScFtqq'] == true && $_ENV['enable_detect_offline_useScFtqq'] == true) {
@@ -456,18 +458,18 @@ class Job
                         );
                         $opts = array(
                             'http' =>
-                                array(
-                                    'method' => 'POST',
-                                    'header' => 'Content-type: application/x-www-form-urlencoded',
-                                    'content' => $postdata
-                                )
+                            array(
+                                'method' => 'POST',
+                                'header' => 'Content-type: application/x-www-form-urlencoded',
+                                'content' => $postdata
+                            )
                         );
                         $context = stream_context_create($opts);
                         file_get_contents('https://sc.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
                     }
 
                     foreach ($adminUser as $user) {
-                        echo 'Send offline mail to user: ' . $user->id;
+                        echo 'Send offline mail to user: ' . $user->id . PHP_EOL;
                         $subject = $_ENV['appName'] . '-系统警告';
                         $to = $user->email;
                         $text = '管理员您好，系统发现节点 ' . $node->name . ' 掉线了，请您及时处理。';
@@ -506,17 +508,17 @@ class Job
 
                         $opts = array(
                             'http' =>
-                                array(
-                                    'method' => 'POST',
-                                    'header' => 'Content-type: application/x-www-form-urlencoded',
-                                    'content' => $postdata
-                                )
+                            array(
+                                'method' => 'POST',
+                                'header' => 'Content-type: application/x-www-form-urlencoded',
+                                'content' => $postdata
+                            )
                         );
                         $context = stream_context_create($opts);
                         file_get_contents('https://sc.ftqq.com/' . $ScFtqq_SCKEY . '.send', false, $context);
                     }
                     foreach ($adminUser as $user) {
-                        echo 'Send offline mail to user: ' . $user->id;
+                        echo 'Send offline mail to user: ' . $user->id . PHP_EOL;
                         $subject = $_ENV['appName'] . '-系统提示';
                         $to = $user->email;
                         $text = '管理员您好，系统发现节点 ' . $node->name . ' 恢复上线了。';
@@ -544,11 +546,13 @@ class Job
                     $node->save();
                 }
             }
+            echo '节点掉线检测结束' . PHP_EOL;
         }
 
 
         //登录地检测
         if ($_ENV['login_warn'] == true) {
+            echo '异常登录检测开始' . PHP_EOL;
             $iplocation = new QQWry();
             $Logs = LoginIp::where('datetime', '>', time() - 60)->get();
             foreach ($Logs as $log) {
@@ -584,8 +588,7 @@ class Job
                                     Mail::send($to, $subject, 'news/warn.tpl', [
                                         'user' => $user,
                                         'text' => $text
-                                    ], [
-                                    ]);
+                                    ], []);
                                 } catch (Exception $e) {
                                     echo $e->getMessage();
                                 }
@@ -594,6 +597,7 @@ class Job
                     }
                 }
             }
+            echo '异常登录检测结束' . PHP_EOL;
         }
 
         $users = User::all();
@@ -621,8 +625,7 @@ class Job
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         'user' => $user,
                         'text' => $text
-                    ], [
-                    ]);
+                    ], []);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -640,13 +643,17 @@ class Job
                 $under_limit = false;
 
                 if ($user->transfer_enable != 0) {
-                    if ($_ENV['notify_limit_mode'] == 'per' &&
-                        $user_traffic_left / $user->transfer_enable * 100 < $_ENV['notify_limit_value']) {
+                    if (
+                        $_ENV['notify_limit_mode'] == 'per' &&
+                        $user_traffic_left / $user->transfer_enable * 100 < $_ENV['notify_limit_value']
+                    ) {
                         $under_limit = true;
                         $unit_text = '%';
                     }
-                } elseif ($_ENV['notify_limit_mode'] == 'mb' &&
-                    Tools::flowToMB($user_traffic_left) < $_ENV['notify_limit_value']) {
+                } elseif (
+                    $_ENV['notify_limit_mode'] == 'mb' &&
+                    Tools::flowToMB($user_traffic_left) < $_ENV['notify_limit_value']
+                ) {
                     $under_limit = true;
                     $unit_text = 'MB';
                 }
@@ -671,7 +678,8 @@ class Job
                 }
             }
 
-            if ($_ENV['account_expire_delete_days'] >= 0 &&
+            if (
+                $_ENV['account_expire_delete_days'] >= 0 &&
                 strtotime($user->expire_in) + $_ENV['account_expire_delete_days'] * 86400 < time() &&
                 $user->money <= $_ENV['auto_clean_min_money']
 
@@ -683,8 +691,7 @@ class Job
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         'user' => $user,
                         'text' => $text
-                    ], [
-                    ]);
+                    ], []);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -694,7 +701,8 @@ class Job
             }
 
 
-            if ($_ENV['auto_clean_uncheck_days'] > 0 &&
+            if (
+                $_ENV['auto_clean_uncheck_days'] > 0 &&
                 max(
                     $user->last_check_in_time,
                     strtotime($user->reg_date)
@@ -709,8 +717,7 @@ class Job
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         'user' => $user,
                         'text' => $text
-                    ], [
-                    ]);
+                    ], []);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -718,7 +725,8 @@ class Job
                 continue;
             }
 
-            if ($_ENV['auto_clean_unused_days'] > 0 &&
+            if (
+                $_ENV['auto_clean_unused_days'] > 0 &&
                 max($user->t, strtotime($user->reg_date)) + ($_ENV['auto_clean_unused_days'] * 86400) < time() &&
                 $user->class == 0 &&
                 $user->money <= $_ENV['auto_clean_min_money']
@@ -730,8 +738,7 @@ class Job
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         'user' => $user,
                         'text' => $text
-                    ], [
-                    ]);
+                    ], []);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -739,7 +746,8 @@ class Job
                 continue;
             }
 
-            if ($user->class != 0 &&
+            if (
+                $user->class != 0 &&
                 strtotime($user->class_expire) < time() &&
                 strtotime($user->class_expire) > 1420041600
             ) {
@@ -758,8 +766,7 @@ class Job
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         'user' => $user,
                         'text' => $text
-                    ], [
-                    ]);
+                    ], []);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -796,13 +803,7 @@ class Job
         }
 
         if ($_ENV['enable_telegram'] === true) {
-            # 删除 tg 消息
-            $TelegramTasks = TelegramTasks::where('type', 1)->where('executetime', '<', time())->get();
-            foreach ($TelegramTasks as $Task) {
-                \App\Utils\Telegram\TelegramTools::SendPost('deleteMessage', ['chat_id' => $Task->chatid, 'message_id' => $Task->messageid]);
-                TelegramTasks::where('chatid', $Task->chatid)->where('type', '<>', 1)->where('messageid', $Task->messageid)->delete();
-                $Task->delete();
-            }
+            self::Telegram();
         }
 
         if ($_ENV['enable_auto_detect_ban'] === true) {
@@ -810,118 +811,24 @@ class Job
         }
     }
 
-    public static function detectGFW()
+    /**
+     * Telegram 任务
+     */
+    public static function Telegram(): void
     {
-        //节点被墙检测
-        $last_time = file_get_contents(BASE_PATH . '/storage/last_detect_gfw_time');
-        for ($count = 1; $count <= 12; $count++) {
-            if (time() - $last_time >= $_ENV['detect_gfw_interval']) {
-                $file_interval = fopen(BASE_PATH . '/storage/last_detect_gfw_time', 'wb');
-                fwrite($file_interval, time());
-                fclose($file_interval);
-                $nodes = Node::all();
-                $adminUser = User::where('is_admin', '=', '1')->get();
-                foreach ($nodes as $node) {
-                    if ($node->node_ip == '' ||
-                        $node->node_ip == null ||
-                        $node->online == false) {
-                        continue;
-                    }
-                    $api_url = $_ENV['detect_gfw_url'];
-                    $api_url = str_replace(
-                        array('{ip}', '{port}'),
-                        array($node->node_ip, $_ENV['detect_gfw_port']),
-                        $api_url
-                    );
-                    //因为考虑到有v2ray之类的节点，所以不得不使用ip作为参数
-                    $result_tcping = false;
-                    $detect_time = $_ENV['detect_gfw_count'];
-                    for ($i = 1; $i <= $detect_time; $i++) {
-                        $json_tcping = json_decode(file_get_contents($api_url), true);
-                        if (eval('return ' . $_ENV['detect_gfw_judge'] . ';')) {
-                            $result_tcping = true;
-                            break;
-                        }
-                    }
-                    if ($result_tcping == false) {
-                        //被墙了
-                        echo($node->id . ':false' . PHP_EOL);
-                        //判断有没有发送过邮件
-                        if ($node->gfw_block == true) {
-                            continue;
-                        }
-                        foreach ($adminUser as $user) {
-                            echo 'Send gfw mail to user: ' . $user->id . '-';
-                            $subject = $_ENV['appName'] . '-系统警告';
-                            $to = $user->email;
-                            $text = '管理员您好，系统发现节点 ' . $node->name . ' 被墙了，请您及时处理。';
-                            try {
-                                Mail::send($to, $subject, 'news/warn.tpl', [
-                                    'user' => $user,
-                                    'text' => $text
-                                ], [
-                                ]);
-                            } catch (Exception $e) {
-                                echo $e->getMessage();
-                            }
-                            $notice_text = str_replace(
-                                '%node_name%',
-                                $node->name,
-                                Config::getdb('Telegram.msg.NodeGFW')
-                            );
-                        }
-                        if (Config::getdb('Telegram.enable.NodeGFW') !== '0') {
-                            Telegram::Send($notice_text);
-                        }
-                        $node->gfw_block = true;
-                        $node->save();
-                    } else {
-                        //没有被墙
-                        echo($node->id . ':true' . PHP_EOL);
-                        if ($node->gfw_block == false) {
-                            continue;
-                        }
-                        foreach ($adminUser as $user) {
-                            echo 'Send gfw mail to user: ' . $user->id . '-';
-                            $subject = $_ENV['appName'] . '-系统提示';
-                            $to = $user->email;
-                            $text = '管理员您好，系统发现节点 ' . $node->name . ' 溜出墙了。';
-                            try {
-                                Mail::send($to, $subject, 'news/warn.tpl', [
-                                    'user' => $user,
-                                    'text' => $text
-                                ], [
-                                ]);
-                            } catch (Exception $e) {
-                                echo $e->getMessage();
-                            }
-                            $notice_text = str_replace(
-                                '%node_name%',
-                                $node->name,
-                                Config::getdb('Telegram.msg.NodeGFW_recover')
-                            );
-                        }
-                        if (Config::getdb('Telegram.enable.NodeGFW_recover') !== '0') {
-                            Telegram::Send($notice_text);
-                        }
-                        $node->gfw_block = false;
-                        $node->save();
-                    }
-                }
-                break;
-            }
-
-            echo($node->id . 'interval skip' . PHP_EOL);
-            sleep(3);
+        # 删除 tg 消息
+        $TelegramTasks = TelegramTasks::where('type', 1)->where('executetime', '<', time())->get();
+        foreach ($TelegramTasks as $Task) {
+            \App\Utils\Telegram\TelegramTools::SendPost('deleteMessage', ['chat_id' => $Task->chatid, 'message_id' => $Task->messageid]);
+            TelegramTasks::where('chatid', $Task->chatid)->where('type', '<>', 1)->where('messageid', $Task->messageid)->delete();
+            $Task->delete();
         }
     }
 
     /**
      * 审计封禁任务
-     *
-     * @return void
      */
-    public static function DetectBan()
+    public static function DetectBan(): void
     {
         echo '审计封禁检查开始.' . PHP_EOL;
         $new_logs = DetectLog::where('status', '=', 0)->orderBy('id', 'asc')->take($_ENV['auto_detect_ban_numProcess'])->get();
@@ -1013,5 +920,111 @@ class Job
             echo '- 暂无新记录.' . PHP_EOL;
         }
         echo '审计封禁检查结束.' . PHP_EOL;
+    }
+
+    public static function detectGFW()
+    {
+        //节点被墙检测
+        $last_time = file_get_contents(BASE_PATH . '/storage/last_detect_gfw_time');
+        for ($count = 1; $count <= 12; $count++) {
+            if (time() - $last_time >= $_ENV['detect_gfw_interval']) {
+                $file_interval = fopen(BASE_PATH . '/storage/last_detect_gfw_time', 'wb');
+                fwrite($file_interval, time());
+                fclose($file_interval);
+                $nodes = Node::all();
+                $adminUser = User::where('is_admin', '=', '1')->get();
+                foreach ($nodes as $node) {
+                    if (
+                        $node->node_ip == '' ||
+                        $node->node_ip == null ||
+                        $node->online == false
+                    ) {
+                        continue;
+                    }
+                    $api_url = $_ENV['detect_gfw_url'];
+                    $api_url = str_replace(
+                        array('{ip}', '{port}'),
+                        array($node->node_ip, $_ENV['detect_gfw_port']),
+                        $api_url
+                    );
+                    //因为考虑到有v2ray之类的节点，所以不得不使用ip作为参数
+                    $result_tcping = false;
+                    $detect_time = $_ENV['detect_gfw_count'];
+                    for ($i = 1; $i <= $detect_time; $i++) {
+                        $json_tcping = json_decode(file_get_contents($api_url), true);
+                        if (eval('return ' . $_ENV['detect_gfw_judge'] . ';')) {
+                            $result_tcping = true;
+                            break;
+                        }
+                    }
+                    if ($result_tcping == false) {
+                        //被墙了
+                        echo ($node->id . ':false' . PHP_EOL);
+                        //判断有没有发送过邮件
+                        if ($node->gfw_block == true) {
+                            continue;
+                        }
+                        foreach ($adminUser as $user) {
+                            echo 'Send gfw mail to user: ' . $user->id . '-';
+                            $subject = $_ENV['appName'] . '-系统警告';
+                            $to = $user->email;
+                            $text = '管理员您好，系统发现节点 ' . $node->name . ' 被墙了，请您及时处理。';
+                            try {
+                                Mail::send($to, $subject, 'news/warn.tpl', [
+                                    'user' => $user,
+                                    'text' => $text
+                                ], []);
+                            } catch (Exception $e) {
+                                echo $e->getMessage();
+                            }
+                            $notice_text = str_replace(
+                                '%node_name%',
+                                $node->name,
+                                Config::getdb('Telegram.msg.NodeGFW')
+                            );
+                        }
+                        if (Config::getdb('Telegram.enable.NodeGFW') !== '0') {
+                            Telegram::Send($notice_text);
+                        }
+                        $node->gfw_block = true;
+                        $node->save();
+                    } else {
+                        //没有被墙
+                        echo ($node->id . ':true' . PHP_EOL);
+                        if ($node->gfw_block == false) {
+                            continue;
+                        }
+                        foreach ($adminUser as $user) {
+                            echo 'Send gfw mail to user: ' . $user->id . '-';
+                            $subject = $_ENV['appName'] . '-系统提示';
+                            $to = $user->email;
+                            $text = '管理员您好，系统发现节点 ' . $node->name . ' 溜出墙了。';
+                            try {
+                                Mail::send($to, $subject, 'news/warn.tpl', [
+                                    'user' => $user,
+                                    'text' => $text
+                                ], []);
+                            } catch (Exception $e) {
+                                echo $e->getMessage();
+                            }
+                            $notice_text = str_replace(
+                                '%node_name%',
+                                $node->name,
+                                Config::getdb('Telegram.msg.NodeGFW_recover')
+                            );
+                        }
+                        if (Config::getdb('Telegram.enable.NodeGFW_recover') !== '0') {
+                            Telegram::Send($notice_text);
+                        }
+                        $node->gfw_block = false;
+                        $node->save();
+                    }
+                }
+                break;
+            }
+
+            echo ($node->id . 'interval skip' . PHP_EOL);
+            sleep(3);
+        }
     }
 }
