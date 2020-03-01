@@ -916,32 +916,43 @@ class Job
         }
     }
 
+    /**
+     * 审计封禁任务
+     *
+     * @return void
+     */
     public static function DetectBan()
     {
-        echo '审计封禁检查开始.';
-        $last_id = (int) Config::getdb('get.Detect.Log');
-        $new_logs = DetectLog::where('id', '>', $last_id)->orderBy('id', 'desc')->get();
+        echo '审计封禁检查开始.' . PHP_EOL;
+        $new_logs = DetectLog::where('status', '=', 0)->orderBy('id', 'asc')->take($_ENV['auto_detect_ban_numProcess'])->get();
         if (count($new_logs) != 0) {
-            $Config = GConfig::find('get.Detect.Log');
-            $Config->value = $new_logs[0]->id;
-            $Config->save();
+
             $user_logs = [];
             foreach ($new_logs as $log) {
+                // 分类各个用户的记录数量
                 if (!in_array($log->user_id, array_keys($user_logs))) {
                     $user_logs[$log->user_id] = 0;
                 }
                 $user_logs[$log->user_id]++;
             }
+
             foreach ($user_logs as $userid => $value) {
+                // 执行封禁
                 $user = User::find($userid);
                 if ($user == null) {
                     continue;
                 }
                 $user->all_detect_number += $value;
                 $user->save();
+
                 if ($user->enable == 0 || ($user->is_admin && $_ENV['auto_detect_ban_allow_admin'] === true) || in_array($user->id, $_ENV['auto_detect_ban_allow_users'])) {
+                    // 如果用户已被封禁
+                    // 如果用户是管理员
+                    // 如果属于钦定用户
+                    // 则跳过
                     continue;
                 }
+
                 if ($_ENV['auto_detect_ban_type'] == 1) {
                     $last_DetectBanLog      = DetectBanLog::where('user_id', $userid)->orderBy('id', 'desc')->first();
                     $last_all_detect_number = ($last_DetectBanLog == null ? 0 : (int) $last_DetectBanLog->all_detect_number);
@@ -996,7 +1007,9 @@ class Job
                     }
                 }
             }
+        } else {
+            echo '- 暂无新记录.' . PHP_EOL;
         }
-        echo '审计封禁检查结束.';
+        echo '审计封禁检查结束.' . PHP_EOL;
     }
 }

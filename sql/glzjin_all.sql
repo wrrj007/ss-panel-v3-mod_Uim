@@ -768,3 +768,6 @@ CREATE TABLE IF NOT EXISTS `telegram_tasks` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Telegram 任务列表';
 
+
+ALTER TABLE `detect_log` ADD `status` int(2) NOT NULL DEFAULT '0' AFTER `node_id`;
+
