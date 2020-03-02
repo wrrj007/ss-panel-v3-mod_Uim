@@ -749,7 +749,7 @@ class LinkController extends BaseController
         $render = ConfRender::getTemplateRender();
         $render->assign('All_Proxy', $All_Proxy)->assign('ProxyGroups', $ProxyGroups);
 
-        return $render->fetch('quantumult.tpl');
+        return $render->fetch('quantumult/quantumult.tpl');
     }
 
     /**
