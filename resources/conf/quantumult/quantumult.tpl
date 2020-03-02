@@ -11,7 +11,6 @@
 
 [Rule]
 # Apple
-
 URL-REGEX,*apple.com/cn,🍎 Only
 
 PROCESS-NAME,storedownloadd,🍎 Only

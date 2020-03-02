@@ -1,5 +1,6 @@
   - DOMAIN-SUFFIX,smtp,DIRECT
   - DOMAIN-KEYWORD,aria2,DIRECT
+
   - DOMAIN-SUFFIX,ampproject.org,🔰国外流量
   - DOMAIN-SUFFIX,appspot.com,🔰国外流量
   - DOMAIN-SUFFIX,blogger.com,🔰国外流量
@@ -543,6 +544,7 @@
   - DOMAIN-SUFFIX,yimg.com,🔰国外流量
   - DOMAIN,api.steampowered.com,🔰国外流量
   - DOMAIN,store.steampowered.com,🔰国外流量
+
   - DOMAIN-SUFFIX,aaplimg.com,🍎苹果服务
   - DOMAIN-SUFFIX,apple.co,🍎苹果服务
   - DOMAIN-SUFFIX,apple.com,🍎苹果服务
@@ -555,6 +557,7 @@
   - DOMAIN-SUFFIX,me.com,🍎苹果服务
   - DOMAIN-SUFFIX,mzstatic.com,🍎苹果服务
   - DOMAIN,www-cdn.icloud.com.akadns.net,🍎苹果服务
+
   - DOMAIN-SUFFIX,t.me,✈️Telegram
   - DOMAIN-SUFFIX,tdesktop.com,✈️Telegram
   - DOMAIN-SUFFIX,telegra.ph,✈️Telegram
@@ -569,9 +572,11 @@
   - IP-CIDR6,2001:b28:f23d::/48,✈️Telegram,no-resolve
   - IP-CIDR6,2001:b28:f23f::/48,✈️Telegram,no-resolve
   - IP-CIDR6,2001:67c:4e8::/48,✈️Telegram,no-resolve
+
   - DOMAIN-SUFFIX,googlevideo.com,🎬Youtube
   - DOMAIN-SUFFIX,youtube.com,🎬Youtube
   - DOMAIN,youtubei.googleapis.com,🎬Youtube
+
   - DOMAIN-SUFFIX,netflix.com,🎬Netflix
   - DOMAIN-SUFFIX,netflix.net,🎬Netflix
   - DOMAIN-SUFFIX,nflxext.com,🎬Netflix
@@ -598,6 +603,7 @@
   - IP-CIDR,192.173.64.0/18,🎬Netflix,no-resolve
   - IP-CIDR,198.38.96.0/19,🎬Netflix,no-resolve
   - IP-CIDR,198.45.48.0/20,🎬Netflix,no-resolve
+
   - DOMAIN-SUFFIX,deezer.com,🎬国外媒体
   - DOMAIN-SUFFIX,dzcdn.net,🎬国外媒体
   - DOMAIN-SUFFIX,kkbox.com,🎬国外媒体
@@ -746,6 +752,7 @@
   - DOMAIN-SUFFIX,googlevideo.com,🎬国外媒体
   - DOMAIN-SUFFIX,youtube.com,🎬国外媒体
   - DOMAIN,youtubei.googleapis.com,🎬国外媒体
+
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
@@ -1105,4 +1112,5 @@
   - DOMAIN,images-cn.ssl-images-amazon.com,DIRECT
   - IP-CIDR,119.28.28.28/32,DIRECT,no-resolve
   - GEOIP,CN,DIRECT
+
   - MATCH,⚓️其他流量
