@@ -8,7 +8,12 @@ use Telegram\Bot\Api;
 
 class Telegram
 {
-    public static function Send($messageText)
+    /**
+     * 向 $_ENV['telegram_chatid'] 中配置的群组发送讯息
+     *
+     * @param string $messageText
+     */
+    public static function Send($messageText): void
     {
         if ($_ENV['enable_telegram'] == true) {
             if ($_ENV['use_new_telegram_bot'] === true) {
@@ -37,7 +42,12 @@ class Telegram
         }
     }
 
-    public static function SendMarkdown($messageText)
+    /**
+     * 向 $_ENV['telegram_chatid'] 中配置的群组以 Markdown 格式发送讯息
+     *
+     * @param string $messageText
+     */
+    public static function SendMarkdown($messageText): void
     {
         if ($_ENV['enable_telegram'] == true) {
             if ($_ENV['use_new_telegram_bot'] === true) {
