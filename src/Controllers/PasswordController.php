@@ -93,11 +93,11 @@ class PasswordController extends BaseController
             $rs['ret'] = 1;
             $rs['msg'] = '重置成功';
             $user->clean_link();
-        }
 
-        // 禁止链接多次使用
-        $token->expire_time = time();
-        $token->save();
+            // 禁止链接多次使用
+            $token->expire_time = time();
+            $token->save();
+        }
 
         return $response->write(json_encode($rs));
     }
