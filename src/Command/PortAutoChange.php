@@ -17,9 +17,10 @@
 
 namespace App\Command;
 
-use App\Models\Node;
-use App\Models\User;
-use App\Services\Config;
+use App\Models\{
+    User,
+    Node
+};
 use App\Utils\URL;
 
 class PortAutoChange

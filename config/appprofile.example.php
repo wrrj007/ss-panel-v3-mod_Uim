@@ -85,16 +85,6 @@ $_ENV['Surge2_Profiles'] = [
         ],
         'Proxy' => [],
         'ProxyGroup' => [
-            /*
-# 白名单模式 PROXY，黑名单模式 DIRECT
-Final = select,PROXY,DIRECT
-# 节点选项
-PROXY = select,Auto,1,2,3,4
-# 国际流媒体服务
-GlobalMedia = select,PROXY,1,2,3,4
-# Apple 服务策略组
-Apple = select,DIRECT,PROXY
-*/
             [
                 'name' => '🍃 PROXY',
                 'type' => 'select',
@@ -142,50 +132,94 @@ Apple = select,DIRECT,PROXY
 $_ENV['Clash_Profiles'] = [
     'default' => [
         'Checks' => [],
+        'General' => [
+            'port'                => 7890,
+            'socks-port'          => 7891,
+            'redir-port'          => 7892,
+            'allow-lan'           => false,
+            'mode'                => 'Rule',
+            'log-level'           => 'silent',
+            'external-controller' => '0.0.0.0:9090',
+            'secret'              => ''
+        ],
+        'Proxy' => [],
         'ProxyGroup' => [
             [
-                'name' => 'Proxy',
+                'name' => '🔰国外流量',
                 'type' => 'select',
                 'content' => [
-                    'regex' => '(.*)'
+                    'regex' => '(.*)',
+                    'right-proxies' => [
+                        '🚀直接连接'
+                    ],
                 ]
             ],
             [
-                'name' => 'Domestic',
+                'name' => '⚓️其他流量',
                 'type' => 'select',
                 'content' => [
                     'left-proxies' => [
-                        'DIRECT',
-                        'Proxy'
+                        '🔰国外流量',
+                        '🚀直接连接'
                     ]
                 ]
             ],
             [
-                'name' => 'AsianTV',
+                'name' => '✈️Telegram',
                 'type' => 'select',
                 'content' => [
                     'left-proxies' => [
-                        'Domestic',
-                        'Proxy'
+                        '🔰国外流量'
+                    ],
+                    'regex' => '(.*)',
+                ]
+            ],
+            [
+                'name' => '🎬Youtube',
+                'type' => 'select',
+                'content' => [
+                    'left-proxies' => [
+                        '🔰国外流量'
+                    ],
+                    'regex' => '(.*)',
+                ]
+            ],
+            [
+                'name' => '🎬Netflix',
+                'type' => 'select',
+                'content' => [
+                    'left-proxies' => [
+                        '🔰国外流量'
+                    ],
+                    'regex' => '(.*)',
+                ]
+            ],
+            [
+                'name' => '🎬国外媒体',
+                'type' => 'select',
+                'content' => [
+                    'left-proxies' => [
+                        '🔰国外流量'
+                    ],
+                    'regex' => '(.*)',
+                ]
+            ],
+            [
+                'name' => '🍎苹果服务',
+                'type' => 'select',
+                'content' => [
+                    'left-proxies' => [
+                        '🚀直接连接',
+                        '🔰国外流量'
                     ]
                 ]
             ],
             [
-                'name' => 'GlobalTV',
+                'name' => '🚀直接连接',
                 'type' => 'select',
                 'content' => [
                     'left-proxies' => [
-                        'Proxy'
-                    ]
-                ]
-            ],
-            [
-                'name' => 'Others',
-                'type' => 'select',
-                'content' => [
-                    'left-proxies' => [
-                        'Proxy',
-                        'Domestic'
+                        'DIRECT'
                     ]
                 ]
             ]
