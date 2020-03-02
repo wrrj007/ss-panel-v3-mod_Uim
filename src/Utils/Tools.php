@@ -46,7 +46,7 @@ class Tools
     }
 
     /**
-     * 根据流量值转换 B 输出
+     * 根据含单位的流量值转换 B 输出
      */
     public static function flowAutoShowZ($Value)
     {
