@@ -738,6 +738,7 @@ ALTER TABLE `user` ADD `all_detect_number` int(11) NOT NULL DEFAULT '0' AFTER `l
 --
 CREATE TABLE IF NOT EXISTS `gconfig` (
   `key`            varchar(50)  NOT NULL COMMENT '配置名',
+  `type`           varchar(32)  NOT NULL COMMENT '值类型',
   `value`          text         NOT NULL COMMENT '配置值',
   `oldvalue`       text         NOT NULL COMMENT '之前的配置值',
   `name`           varchar(128) NOT NULL COMMENT '配置名称',
