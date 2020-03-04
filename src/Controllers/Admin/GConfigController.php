@@ -10,8 +10,9 @@ class GConfigController extends AdminController
 {
     public function update($request, $response, $args)
     {
-        $key  = trim($args['key']);
-        $user = Auth::getUser();
+        $key                    = trim($args['key']);
+        $user                   = Auth::getUser();
+
         $config                 = GConfig::where('key', '=', $key)->first();
         $config->oldvalue       = $config->value;
         $config->value          = $request->getParam('value');
@@ -51,7 +52,7 @@ class GConfigController extends AdminController
 
     public function telegram_edit($request, $response, $args)
     {
-        $key = trim($args['key']);
+        $key    = trim($args['key']);
         $config = GConfig::where('key', '=', $key)->first();
         return $this->view()->assign('edit_config', $config)->fetch('admin/config/telegram/edit.tpl');
     }
@@ -63,11 +64,11 @@ class GConfigController extends AdminController
 
     public function telegram_ajax($request, $response, $args)
     {
-        $start = $request->getParam("start");
+        $start        = $request->getParam("start");
         $limit_length = $request->getParam('length');
-        $configs = GConfig::skip($start)->where('key', 'LIKE', "%Telegram%")->limit($limit_length)->get();
-        $total_conut = GConfig::where('key', 'LIKE', "%Telegram%")->count();
-        $data = [];
+        $configs      = GConfig::skip($start)->where('key', 'LIKE', "%Telegram%")->limit($limit_length)->get();
+        $total_conut  = GConfig::where('key', 'LIKE', "%Telegram%")->count();
+        $data         = [];
         foreach ($configs as $config) {
             $tempdata = [];
             $tempdata['op']             = '<a class="btn btn-brand" href="/admin/config/telegram/' . $config->key . '/edit">编辑</a>';
@@ -96,10 +97,10 @@ class GConfigController extends AdminController
             $data[] = $tempdata;
         }
         $info = [
-            'draw' => $request->getParam('draw'),
-            'recordsTotal' => $total_conut,
+            'draw'            => $request->getParam('draw'),
+            'recordsTotal'    => $total_conut,
             'recordsFiltered' => $total_conut,
-            'data' => $data
+            'data'            => $data
         ];
 
         return $response->write(json_encode($info, true));
