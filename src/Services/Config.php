@@ -14,7 +14,7 @@ class Config
 
     public static function getconfig($key)
     {
-        $value = GConfig::where('key', '=', $key);
+        $value = GConfig::where('key', '=', $key)->first();
         if ($value === null) {
             $value = DefaultConfig::firstOrCreate($key);
         }
