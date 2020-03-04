@@ -520,16 +520,28 @@ class URL
             $ssurl = 'ss://' . Tools::base64_url_encode($personal_info) . '@' . $item['address'] . ':' . $item['port'];
             $plugin = '';
             if ($item['obfs'] == 'v2ray' || in_array($item['obfs'], $ss_obfs_list)) {
-                if (strpos($item['obfs'], 'http') !== false) {
-                    $plugin .= 'obfs-local;obfs=http';
-                } elseif (strpos($item['obfs'], 'tls') !== false) {
-                    $plugin .= 'obfs-local;obfs=tls';
-                } else {
+                if ($item['obfs'] == 'v2ray') {
                     $plugin .= 'v2ray;' . $item['obfs_param'];
+                } else {
+                    // 原版
+                    $plugin .= 'obfs-local';
+                    $num = preg_match('#Shadowrocket\/(\d+)#i', $_SERVER['HTTP_USER_AGENT'], $v);
+                    if ($num > 0) {
+                        if ((int) $v[1] >= 963) {
+                            // 替换
+                            $plugin = 'simple-obfs';
+                        }
+                    }
+                    if (strpos($item['obfs'], 'tls') !== false) {
+                        $plugin .= ';obfs=tls';
+                    } else {
+                        $plugin .= ';obfs=http';
+                    }
+                    if ($item['obfs_param'] != '') {
+                        $plugin .= ';obfs-host=' . $item['obfs_param'];
+                    }
                 }
-                if ($item['obfs_param'] != '' && $item['obfs'] != 'v2ray') {
-                    $plugin .= ';obfs-host=' . $item['obfs_param'];
-                }
+                $plugin .= ';obfs-uri=/';   //不影响 V2Ray-Plugin
                 $ssurl .= '/?plugin=' . rawurlencode($plugin) . '&group=' . Tools::base64_url_encode(Config::get('appName'));
             } else {
                 $ssurl .= '/?group=' . Tools::base64_url_encode(Config::get('appName'));
