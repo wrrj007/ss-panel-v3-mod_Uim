@@ -12,13 +12,13 @@ class Config
         return $_ENV[$key];
     }
 
-    public static function getdb($key)
+    public static function getconfig($key)
     {
-        $value = GConfig::find($key);
+        $value = GConfig::where('key', '=', $key);
         if ($value === null) {
             $value = DefaultConfig::firstOrCreate($key);
         }
-        return $value->value;
+        return $value->getValue();
     }
 
     public static function getPublicConfig()

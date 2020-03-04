@@ -52,7 +52,7 @@ class DailyMail
 
         $sts = new Analytics();
 
-        if (Config::getdb('Telegram.enable.Diary') !== '0') {
+        if (Config::getconfig('Telegram.enable.Diary') !== '0') {
             Telegram::Send(
                 str_replace(
                     array(
@@ -63,7 +63,7 @@ class DailyMail
                         $sts->getTodayCheckinUser(),
                         Tools::flowAutoShow($lastday_total)
                     ),
-                    Config::getdb('Telegram.msg.Diary')
+                    Config::getconfig('Telegram.msg.Diary')
                 )
             );
         }

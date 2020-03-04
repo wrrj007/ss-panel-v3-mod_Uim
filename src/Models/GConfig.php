@@ -20,27 +20,6 @@ class GConfig extends Model
      */
     protected $table = 'gconfig';
 
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'key';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
     public function recover($user)
     {
         $this->oldvalue       = $this->value;
@@ -52,17 +31,17 @@ class GConfig extends Model
         $this->save();
     }
 
-    public function get()
+    public function getValue()
     {
         switch ($this->type) {
             case 'bool':
-                return (bool) $this->value;
+                return (bool)      $this->value;
             case 'array':
                 return json_decode($this->value, true);
             case 'string':
-                return (string) $this->value;
+                return (string)    $this->value;
             default:
-                return (string) $this->value;
+                return (string)    $this->value;
         }
     }
 
