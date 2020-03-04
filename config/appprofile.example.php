@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * default 为默认配置，你可以添加其他配置，但必须保证默认配置存在
+ *
+ * Checks 填写为没有直接在规则文件中使用的并且使用了筛选规则且组内或可能无节点的策略组名
+ *  - 例如使用 regex 分类国家分组，未匹配时组内无节点，此类需要填入 Checks 中以保证配置文件无误
+ *
+ * Surge 以及 Surfboard 的 General 中，布尔值请填写为字符串
+ *
+ * Surge 以及 Surfboard 的 Proxy 中，请填写为该应用的格式
+ * Clash 的 Proxy 中，请填写为数组
+ */
+
+/**
+ * Surge 配置文件定义
+ */
 $_ENV['Surge_Profiles'] = [
     'default' => [
         'Checks' => [],
@@ -103,6 +118,9 @@ $_ENV['Surge_Profiles'] = [
     ]
 ];
 
+/**
+ * Surge 2.x 版本的配置文件定义
+ */
 $_ENV['Surge2_Profiles'] = [
     'default' => [
         'Checks' => [],
@@ -197,6 +215,9 @@ $_ENV['Surge2_Profiles'] = [
     ]
 ];
 
+/**
+ * Clash 配置文件定义
+ */
 $_ENV['Clash_Profiles'] = [
     'default' => [
         'Checks' => [],
@@ -298,6 +319,9 @@ $_ENV['Clash_Profiles'] = [
     ]
 ];
 
+/**
+ * Surfboard 配置文件定义
+ */
 $_ENV['Surfboard_Profiles'] = [
     'default' => [
         'Checks' => [],
