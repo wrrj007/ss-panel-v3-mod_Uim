@@ -527,7 +527,7 @@ class URL
                     $plugin .= 'obfs-local';
                     $num = preg_match('#Shadowrocket\/(\d+)#i', $_SERVER['HTTP_USER_AGENT'], $v);
                     if ($num > 0) {
-                        if ((int) $v[1] >= 963) {
+                        if (in_array((int) $v[1], [963, 964])) {
                             // 替换
                             $plugin = 'simple-obfs';
                         }
