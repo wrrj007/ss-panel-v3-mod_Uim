@@ -45,7 +45,7 @@ class DefaultConfig
     public static function firstOrCreate($key)
     {
         return (self::create($key)
-            ? GConfig::find($key)
+            ? GConfig::where('key', '=', $key)->first()
             : null
         );
     }
@@ -60,7 +60,7 @@ class DefaultConfig
         $return = '开始检查新增的配置项...' . PHP_EOL;
         $configs = self::configs();
         foreach ($configs as $key => $value) {
-            $config = GConfig::find($key);
+            $config = GConfig::where('key', '=', $key)->first();
             if ($config == null) {
                 if (self::create($key)) {
                     $return .= '新增的配置项：' . $key . '：' . $value['name'] . PHP_EOL;
