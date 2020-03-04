@@ -12,8 +12,7 @@ class GConfigController extends AdminController
     {
         $key  = trim($args['key']);
         $user = Auth::getUser();
-
-        $config                 = GConfig::find($key);
+        $config                 = GConfig::where('key', '=', $key)->first();
         $config->oldvalue       = $config->value;
         $config->value          = $request->getParam('value');
         $config->operator_id    = $user->id;
@@ -53,7 +52,7 @@ class GConfigController extends AdminController
     public function telegram_edit($request, $response, $args)
     {
         $key = trim($args['key']);
-        $config = GConfig::find($key);
+        $config = GConfig::where('key', '=', $key)->first();
         return $this->view()->assign('edit_config', $config)->fetch('admin/config/telegram/edit.tpl');
     }
 
@@ -103,6 +102,6 @@ class GConfigController extends AdminController
             'data' => $data
         ];
 
-        return json_encode($info, true);
+        return $response->write(json_encode($info, true));
     }
 }
