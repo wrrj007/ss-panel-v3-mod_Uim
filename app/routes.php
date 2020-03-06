@@ -298,6 +298,9 @@ return function (SlimApp $app) {
         $this->get('/user/{id}/traffic',         App\Controllers\Admin\UserLog\TrafficLogController::class . ':index');
         $this->post('/user/{id}/traffic/ajax',   App\Controllers\Admin\UserLog\TrafficLogController::class . ':ajax');
 
+        // 指定用户登录记录
+        $this->get('/user/{id}/login',         App\Controllers\Admin\UserLog\LoginLogController::class . ':index');
+        $this->post('/user/{id}/login/ajax',   App\Controllers\Admin\UserLog\LoginLogController::class . ':ajax');
 
         // Config Mange
         $this->group('/config', function () {
