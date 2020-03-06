@@ -131,6 +131,7 @@
             columns: [
                 {literal}
                 {"data": "op", "orderable": false},
+                {"data": "querys"},
                 {"data": "id"},
                 {"data": "user_name"},
                 {"data": "remark"},
