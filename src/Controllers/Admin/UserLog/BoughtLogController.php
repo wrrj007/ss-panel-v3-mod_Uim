@@ -8,18 +8,20 @@ use App\Models\{
     Shop,
     Bought
 };
+use Slim\Http\{
+    Request,
+    Response
+};
+use Psr\Http\Message\ResponseInterface;
 
 class BoughtLogController extends AdminController
 {
     /**
-     * Undocumented function
-     *
-     * @param [type] $request
-     * @param [type] $response
-     * @param [type] $args
-     * @return void
+     * @param Request   $request
+     * @param Response  $response
+     * @param array     $args
      */
-    public function bought($request, $response, $args)
+    public function bought($request, $response, $args): ResponseInterface
     {
         $id = $args['id'];
         $user = User::find($id);
@@ -38,14 +40,21 @@ class BoughtLogController extends AdminController
         $table_config['ajax_url'] = 'bought/ajax';
         $shops = Shop::where('status', 1)->orderBy('name')->get();
 
-        return $this->view()
-            ->assign('table_config', $table_config)
-            ->assign('shops', $shops)
-            ->assign('user', $user)
-            ->display('admin/user/bought.tpl');
+        return $response->write(
+            $this->view()
+                ->assign('table_config', $table_config)
+                ->assign('shops', $shops)
+                ->assign('user', $user)
+                ->display('admin/user/bought.tpl')
+        );
     }
 
-    public function bought_ajax($request, $response, $args)
+    /**
+     * @param Request   $request
+     * @param Response  $response
+     * @param array     $args
+     */
+    public function bought_ajax($request, $response, $args): ResponseInterface
     {
         $start        = $request->getParam("start");
         $limit_length = $request->getParam('length');
@@ -83,10 +92,17 @@ class BoughtLogController extends AdminController
             'data'              => $data
         ];
 
-        return $response->write(json_encode($info, true));
+        return $response->write(
+            json_encode($info, true)
+        );
     }
 
-    public function bought_delete($request, $response, $args)
+    /**
+     * @param Request   $request
+     * @param Response  $response
+     * @param array     $args
+     */
+    public function bought_delete($request, $response, $args): ResponseInterface
     {
         $id = $request->getParam('id');
         $Bought = Bought::find($id);
@@ -98,10 +114,17 @@ class BoughtLogController extends AdminController
         $rs['ret'] = 1;
         $rs['msg'] = '删除成功';
 
-        return $response->write(json_encode($rs));
+        return $response->write(
+            json_encode($rs)
+        );
     }
 
-    public function bought_add($request, $response, $args)
+    /**
+     * @param Request   $request
+     * @param Response  $response
+     * @param array     $args
+     */
+    public function bought_add($request, $response, $args): ResponseInterface
     {
         $id = $args['id'];
         $user = User::find($id);
@@ -144,6 +167,8 @@ class BoughtLogController extends AdminController
         $rs['msg']        = ($buy_type != 0 ? '套餐购买成功' : '套餐添加成功');
         $rs['ret']        = 1;
 
-        return $response->write(json_encode($rs));
+        return $response->write(
+            json_encode($rs)
+        );
     }
 }
