@@ -314,6 +314,11 @@ class UserController extends AdminController
             $rule->save();
         }
 
+        $money = $request->getParam('money') - $user->money;
+        if ($money == 0) {
+            $user->addMoney($money);
+        }
+
         $user->passwd           = $request->getParam('passwd');
         $user->protocol         = $request->getParam('protocol');
         $user->protocol_param   = $request->getParam('protocol_param');

@@ -814,4 +814,16 @@ class User extends Model
         }
         return '多个有效套餐无法显示.';
     }
+
+    public function addMoney($total)
+    {
+        $codeq              = new Code();
+        $codeq->code        = '管理员添加';
+        $codeq->isused      = 1;
+        $codeq->type        = -1;
+        $codeq->number      = $total;
+        $codeq->usedatetime = date('Y-m-d H:i:s');
+        $codeq->userid      = $this->id;
+        $codeq->save();
+    }
 }
