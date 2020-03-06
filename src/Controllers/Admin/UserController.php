@@ -315,7 +315,7 @@ class UserController extends AdminController
         }
 
         $money = $request->getParam('money') - $user->money;
-        if ($money == 0) {
+        if ($money != 0) {
             $user->addMoney($money);
         }
 
