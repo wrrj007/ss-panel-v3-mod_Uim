@@ -67,7 +67,7 @@ class SubLogController extends AdminController
             $tempdata['id']                 = $data->id;
             $tempdata['subscribe_type']     = $data->subscribe_type;
             $tempdata['request_ip']         = $data->request_ip;
-            $location                       = $iplocation->getlocation($data['location']);
+            $location                       = $iplocation->getlocation($data->request_ip);
             $tempdata['location']           = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
             $tempdata['request_time']       = $data->request_time;
             $tempdata['request_user_agent'] = $data->request_user_agent;
