@@ -277,10 +277,10 @@ return function (SlimApp $app) {
         $this->post('/detect/ban/ajax',         App\Controllers\Admin\DetectBanLogController::class . ':ajax_log');
 
         // 单用户购记录以及添加套餐
-        $this->get('/user/{id}/bought',         App\Controllers\Admin\UserController::class . ':bought');
-        $this->post('/user/{id}/bought/ajax',   App\Controllers\Admin\UserController::class . ':bought_ajax');
-        $this->delete('/user/bought',           App\Controllers\Admin\UserController::class . ':bought_delete');
-        $this->post('/user/{id}/bought/buy',    App\Controllers\Admin\UserController::class . ':bought_add');
+        $this->get('/user/{id}/bought',         App\Controllers\Admin\UserLog\BoughtLogController::class . ':bought');
+        $this->post('/user/{id}/bought/ajax',   App\Controllers\Admin\UserLog\BoughtLogController::class . ':bought_ajax');
+        $this->delete('/user/bought',           App\Controllers\Admin\UserLog\BoughtLogController::class . ':bought_delete');
+        $this->post('/user/{id}/bought/buy',    App\Controllers\Admin\UserLog\BoughtLogController::class . ':bought_add');
 
         // Config Mange
         $this->group('/config', function () {
