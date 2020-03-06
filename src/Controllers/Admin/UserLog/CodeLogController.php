@@ -55,14 +55,14 @@ class CodeLogController extends AdminController
         $limit_length = $request->getParam('length');
         $id           = $args['id'];
         $user         = User::find($id);
-        $codes        = Code::where('userid', $user->id)->skip($start)->limit($limit_length)->orderBy('id', 'desc')->get();
+        $datas        = Code::where('userid', $user->id)->skip($start)->limit($limit_length)->orderBy('id', 'desc')->get();
         $total_conut  = Code::where('userid', $user->id)->count();
-        $data         = [];
-        foreach ($codes as $code) {
+        $out_data         = [];
+        foreach ($datas as $data) {
             $tempdata                = [];
-            $tempdata['id']          = $code->id;
-            $tempdata['code']        = $code->code;
-            switch ($code->type) {
+            $tempdata['id']          = $data->id;
+            $tempdata['code']        = $data->code;
+            switch ($data->type) {
                 case -1:
                     $type = '充值金额';
                     break;
@@ -74,15 +74,15 @@ class CodeLogController extends AdminController
                     break;
             }
             $tempdata['type']        = $type;
-            $tempdata['number']      = $code->number;
-            $tempdata['usedatetime'] = $code->usedatetime;
-            $data[] = $tempdata;
+            $tempdata['number']      = $data->number;
+            $tempdata['usedatetime'] = $data->usedatetime;
+            $out_data[]              = $tempdata;
         }
         $info = [
             'draw'              => $request->getParam('draw'),
             'recordsTotal'      => $total_conut,
             'recordsFiltered'   => $total_conut,
-            'data'              => $data
+            'data'              => $out_data
         ];
 
         return $response->write(

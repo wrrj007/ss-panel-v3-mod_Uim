@@ -61,7 +61,7 @@ class SubLogController extends AdminController
         $datas        = UserSubscribeLog::where('user_id', $user->id)->skip($start)->limit($limit_length)->orderBy('id', 'desc')->get();
         $total_conut  = UserSubscribeLog::where('user_id', $user->id)->count();
         $iplocation   = new QQWry();
-        $data         = [];
+        $out_data     = [];
         foreach ($datas as $data) {
             $tempdata                       = [];
             $tempdata['id']                 = $data->id;
@@ -71,13 +71,13 @@ class SubLogController extends AdminController
             $tempdata['location']           = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
             $tempdata['request_time']       = $data->request_time;
             $tempdata['request_user_agent'] = $data->request_user_agent;
-            $data[]                         = $tempdata;
+            $out_data[]                     = $tempdata;
         }
         $info = [
             'draw'              => $request->getParam('draw'),
             'recordsTotal'      => $total_conut,
             'recordsFiltered'   => $total_conut,
-            'data'              => $data
+            'data'              => $out_data
         ];
 
         return $response->write(
