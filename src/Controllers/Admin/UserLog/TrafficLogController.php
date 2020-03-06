@@ -5,6 +5,7 @@ namespace App\Controllers\Admin\UserLog;
 use App\Controllers\AdminController;
 use App\Models\{
     User,
+    Node,
     TrafficLog
 };
 use App\Utils\Tools;
@@ -64,9 +65,10 @@ class TrafficLogController extends AdminController
         foreach ($datas as $data) {
             $tempdata                   = [];
             $tempdata['id']             = $data->id;
-            $tempdata['node_name']      = $data->node_name;
+            $node                       = Node::where('id', $data->node_id)->first();
+            $tempdata['node_name']      = $node->name;
             $tempdata['rate']           = $data->rate;
-            $tempdata['origin_traffic'] = Tools::flowAutoShow($data->origin_traffic);
+            $tempdata['origin_traffic'] = Tools::flowAutoShow($data->u + $data->d);
             $tempdata['traffic']        = $data->traffic;
             $tempdata['log_time']       = date('Y-m-d H:i:s', $data->log_time);
             $out_data[]                 = $tempdata;

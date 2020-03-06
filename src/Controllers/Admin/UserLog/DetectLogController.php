@@ -5,7 +5,9 @@ namespace App\Controllers\Admin\UserLog;
 use App\Controllers\AdminController;
 use App\Models\{
     User,
-    DetectLog
+    Node,
+    DetectLog,
+    DetectRule
 };
 use Slim\Http\{
     Request,
@@ -66,13 +68,15 @@ class DetectLogController extends AdminController
         foreach ($datas as $data) {
             $tempdata               = [];
             $tempdata['id']         = $data->id;
+            $node                   = Node::where('id', $data->node_id)->first();
             $tempdata['node_id']    = $data->node_id;
-            $tempdata['node_name']  = $data->node_name;
-            $tempdata['rule_id']    = $data->rule_id;
-            $tempdata['rule_name']  = $data->rule_name;
-            $tempdata['rule_text']  = $data->rule_text;
-            $tempdata['rule_regex'] = $data->rule_regex;
-            $tempdata['rule_type']  = ($data->rule_type == 1 ? '数据包明文匹配' : '数据包十六进制匹配');
+            $tempdata['node_name']  = $node->name;
+            $rule                   = DetectRule::where('id', $data->list_id)->first();
+            $tempdata['rule_id']    = $rule->id;
+            $tempdata['rule_name']  = $rule->name;
+            $tempdata['rule_text']  = $rule->text;
+            $tempdata['rule_regex'] = $rule->regex;
+            $tempdata['rule_type']  = ($rule->type == 1 ? '数据包明文匹配' : '数据包十六进制匹配');
             $tempdata['datetime']   = date('Y-m-d H:i:s', $data->datetime);
             $out_data[]             = $tempdata;
         }
