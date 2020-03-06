@@ -515,7 +515,9 @@ class UserController extends AdminController
 
             $tempdata['querys']     = '<a class="btn btn-brand" href="/admin/user/' . $user->id . '/bought">套餐</a>
                     <a class="btn btn-brand" href="/admin/user/' . $user->id . '/code">充值</a>
-                    <a class="btn btn-brand" href="/admin/user/' . $user->id . '/sublog">订阅</a>';
+                    <a class="btn btn-brand" href="/admin/user/' . $user->id . '/sublog">订阅</a>
+                    <a class="btn btn-brand" href="/admin/user/' . $user->id . '/detect">审计</a>
+                    <a class="btn btn-brand" href="/admin/user/' . $user->id . '/detect">流量</a>';
 
             $tempdata['id']         = $user->id;
             $tempdata['user_name']  = $user->user_name;

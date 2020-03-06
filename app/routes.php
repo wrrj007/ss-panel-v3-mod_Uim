@@ -290,6 +290,15 @@ return function (SlimApp $app) {
         $this->get('/user/{id}/sublog',         App\Controllers\Admin\UserLog\SubLogController::class . ':index');
         $this->post('/user/{id}/sublog/ajax',   App\Controllers\Admin\UserLog\SubLogController::class . ':ajax');
 
+        // 指定用户审计记录
+        $this->get('/user/{id}/detect',         App\Controllers\Admin\UserLog\DetectLogController::class . ':index');
+        $this->post('/user/{id}/detect/ajax',   App\Controllers\Admin\UserLog\DetectLogController::class . ':ajax');
+
+        // 指定用户流量记录
+        $this->get('/user/{id}/traffic',         App\Controllers\Admin\UserLog\TrafficLogController::class . ':index');
+        $this->post('/user/{id}/traffic/ajax',   App\Controllers\Admin\UserLog\TrafficLogController::class . ':ajax');
+
+
         // Config Mange
         $this->group('/config', function () {
             $this->get('/telegram',             App\Controllers\Admin\GConfigController::class . ':telegram');
