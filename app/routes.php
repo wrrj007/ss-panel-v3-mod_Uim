@@ -283,8 +283,12 @@ return function (SlimApp $app) {
         $this->post('/user/{id}/bought/buy',    App\Controllers\Admin\UserLog\BoughtLogController::class . ':bought_add');
 
         // 指定用户充值记录
-        $this->get('/user/{id}/code',         App\Controllers\Admin\UserLog\CodeLogController::class . ':code');
-        $this->post('/user/{id}/code/ajax',   App\Controllers\Admin\UserLog\CodeLogController::class . ':code_ajax');
+        $this->get('/user/{id}/code',           App\Controllers\Admin\UserLog\CodeLogController::class . ':index');
+        $this->post('/user/{id}/code/ajax',     App\Controllers\Admin\UserLog\CodeLogController::class . ':ajax');
+
+        // 指定用户订阅记录
+        $this->get('/user/{id}/sublog',         App\Controllers\Admin\UserLog\SubLogController::class . ':index');
+        $this->post('/user/{id}/sublog/ajax',   App\Controllers\Admin\UserLog\SubLogController::class . ':ajax');
 
         // Config Mange
         $this->group('/config', function () {
