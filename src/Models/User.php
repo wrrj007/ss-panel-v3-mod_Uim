@@ -833,9 +833,9 @@ class User extends Model
      *
      * @param mixed $total 金额
      */
-    public function addMoney($total): void
+    public function addMoneyLog($total): void
     {
-        if ($_ENV['money_from_admin']) {
+        if ($_ENV['money_from_admin'] && $total != 0) {
             $codeq              = new Code();
             $codeq->code        = ($total > 0 ? '管理员赏赐' : '管理员惩戒');
             $codeq->isused      = 1;

@@ -332,10 +332,7 @@ class TelegramTools
         }
         if ($User->save()) {
             if ($useOptionMethod == 'money') {
-                $difference = $new - $old;
-                if ($difference != 0) {
-                    $User->addMoney($difference);
-                }
+                $User->addMoneyLog($new - $old);
             }
             $strArray = [
                 '目标用户：' . $Email,
