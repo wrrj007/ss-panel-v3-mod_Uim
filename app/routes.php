@@ -23,9 +23,9 @@ return function (SlimApp $app) {
     $app->post('/notify',               App\Controllers\HomeController::class . ':notify');
 
     // New Telegram
-    $app->post('/TelegramCallback', App\Controllers\HomeController::class . ':NewTelegram');
+    $app->post('/TelegramCallback',     App\Controllers\HomeController::class . ':NewTelegram');
     // Old Telegram
-    $app->post('/telegram_callback', App\Controllers\HomeController::class . ':telegram');
+    $app->post('/telegram_callback',    App\Controllers\HomeController::class . ':telegram');
 
     // User Center
     $app->group('/user', function () {
@@ -295,12 +295,12 @@ return function (SlimApp $app) {
         $this->post('/user/{id}/detect/ajax',   App\Controllers\Admin\UserLog\DetectLogController::class . ':ajax');
 
         // 指定用户流量记录
-        $this->get('/user/{id}/traffic',         App\Controllers\Admin\UserLog\TrafficLogController::class . ':index');
-        $this->post('/user/{id}/traffic/ajax',   App\Controllers\Admin\UserLog\TrafficLogController::class . ':ajax');
+        $this->get('/user/{id}/traffic',        App\Controllers\Admin\UserLog\TrafficLogController::class . ':index');
+        $this->post('/user/{id}/traffic/ajax',  App\Controllers\Admin\UserLog\TrafficLogController::class . ':ajax');
 
         // 指定用户登录记录
-        $this->get('/user/{id}/login',         App\Controllers\Admin\UserLog\LoginLogController::class . ':index');
-        $this->post('/user/{id}/login/ajax',   App\Controllers\Admin\UserLog\LoginLogController::class . ':ajax');
+        $this->get('/user/{id}/login',          App\Controllers\Admin\UserLog\LoginLogController::class . ':index');
+        $this->post('/user/{id}/login/ajax',    App\Controllers\Admin\UserLog\LoginLogController::class . ':ajax');
 
         // Config Mange
         $this->group('/config', function () {
