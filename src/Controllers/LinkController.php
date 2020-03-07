@@ -57,6 +57,10 @@ class LinkController extends BaseController
 
     public static function GetContent($request, $response, $args)
     {
+        if (!$_ENV['Subscribe']) {
+            return null;
+        }
+
         $token = $args['token'];
 
         //$builder->getPhrase();

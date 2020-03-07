@@ -500,7 +500,7 @@ class User extends Model
     }
 
     // 最后一次被封禁的时间
-    public function last_detect_ban_time()
+    public function last_detect_ban_time(): string
     {
         return ($this->attributes['last_detect_ban_time'] == '1989-06-04 00:05:00'
             ? '未被封禁过'
@@ -508,7 +508,7 @@ class User extends Model
     }
 
     // 当前解封时间
-    public function relieve_time()
+    public function relieve_time(): string
     {
         $logs = DetectBanLog::where('user_id', $this->attributes['id'])->orderBy('id', 'desc')->first();
         if ($this->attributes['enable'] == 0 && $logs != null) {
@@ -520,14 +520,14 @@ class User extends Model
     }
 
     // 累计被封禁的次数
-    public function detect_ban_number()
+    public function detect_ban_number(): int
     {
         $logs = DetectBanLog::where('user_id', $this->attributes['id'])->get();
         return count($logs);
     }
 
     // 最后一次封禁的违规次数
-    public function user_detect_ban_number()
+    public function user_detect_ban_number(): int
     {
         $logs = DetectBanLog::where('user_id', $this->attributes['id'])->orderBy("id", "desc")->first();
         return $logs->detect_number;
@@ -536,7 +536,7 @@ class User extends Model
     /**
      * 签到
      */
-    public function checkin()
+    public function checkin(): array
     {
         $return = [
             'ok'  => true,
@@ -558,8 +558,10 @@ class User extends Model
 
     /**
      * 更新加密方式
+     *
+     * @param string $method
      */
-    public function setMethod($method)
+    public function setMethod($method): array
     {
         $return = [
             'ok'  => true,
@@ -600,8 +602,10 @@ class User extends Model
 
     /**
      * 更新协议
+     *
+     * @param string $Protocol
      */
-    public function setProtocol($Protocol)
+    public function setProtocol($Protocol): array
     {
         $return = [
             'ok'  => true,
@@ -642,8 +646,10 @@ class User extends Model
 
     /**
      * 更新混淆
+     *
+     * @param string $Obfs
      */
-    public function setObfs($Obfs)
+    public function setObfs($Obfs): array
     {
         $return = [
             'ok'  => true,
@@ -680,7 +686,7 @@ class User extends Model
     /**
      * 解绑 Telegram
      */
-    public function TelegramReset()
+    public function TelegramReset(): array
     {
         $return = [
             'ok'  => true,
@@ -716,8 +722,10 @@ class User extends Model
 
     /**
      * 更新端口
+     *
+     * @param int $Port
      */
-    public function setPort($Port)
+    public function setPort($Port): array
     {
         $PortOccupied = User::pluck('port')->toArray();
         if (in_array($Port, $PortOccupied) == true) {
@@ -743,7 +751,7 @@ class User extends Model
     /**
      * 重置端口
      */
-    public function ResetPort()
+    public function ResetPort(): array
     {
         $price = $_ENV['port_price'];
         if ($this->money < $price) {
@@ -764,8 +772,10 @@ class User extends Model
 
     /**
      * 指定端口
+     *
+     * @param int $Port
      */
-    public function SpecifyPort($Port)
+    public function SpecifyPort($Port): array
     {
         $price = $_ENV['port_price_specify'];
         if ($this->money < $price) {
@@ -796,7 +806,10 @@ class User extends Model
         ];
     }
 
-    public function valid_use_loop()
+    /**
+     * 用户下次流量重置时间
+     */
+    public function valid_use_loop(): string
     {
         $boughts = Bought::where('userid', $this->id)->orderBy('id', 'desc')->get();
         $data = [];
@@ -815,15 +828,22 @@ class User extends Model
         return '多个有效套餐无法显示.';
     }
 
-    public function addMoney($total)
+    /**
+     * 手动修改用户余额时增加充值记录，受限于 Config
+     *
+     * @param mixed $total 金额
+     */
+    public function addMoney($total): void
     {
-        $codeq              = new Code();
-        $codeq->code        = ($total > 0 ? '管理员赏赐' : '管理员惩戒');
-        $codeq->isused      = 1;
-        $codeq->type        = -1;
-        $codeq->number      = $total;
-        $codeq->usedatetime = date('Y-m-d H:i:s');
-        $codeq->userid      = $this->id;
-        $codeq->save();
+        if ($_ENV['money_from_admin']) {
+            $codeq              = new Code();
+            $codeq->code        = ($total > 0 ? '管理员赏赐' : '管理员惩戒');
+            $codeq->isused      = 1;
+            $codeq->type        = -1;
+            $codeq->number      = $total;
+            $codeq->usedatetime = date('Y-m-d H:i:s');
+            $codeq->userid      = $this->id;
+            $codeq->save();
+        }
     }
 }

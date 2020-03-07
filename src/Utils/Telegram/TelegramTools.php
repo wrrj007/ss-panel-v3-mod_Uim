@@ -14,7 +14,7 @@ class TelegramTools
      *
      * @param string $value  搜索值
      * @param string $method 查找列
-     * 
+     *
      * @return \App\Models\User
      */
     public static function getUser($value, $method = 'telegram_id')
@@ -331,6 +331,12 @@ class TelegramTools
                 break;
         }
         if ($User->save()) {
+            if ($useOptionMethod == 'money') {
+                $difference = $new - $old;
+                if ($difference != 0) {
+                    $User->addMoney($difference);
+                }
+            }
             $strArray = [
                 '目标用户：' . $Email,
                 '被修改项：' . $useOptionMethodName . '[' . $useOptionMethod . ']',
