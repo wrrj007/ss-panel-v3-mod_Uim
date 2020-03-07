@@ -158,6 +158,9 @@ class UserController extends AdminController
             } else {
                 $res['msg'] .= '<br/>但是套餐添加失败了，原因是套餐不存在';
             }
+            if ($user->money != 0) {
+                $user->addMoney($user->money);
+            }
             $subject            = $_ENV['appName'] . '-新用户注册通知';
             $to                 = $user->email;
             $text               = '您好，管理员已经为您生成账户，用户名: ' . $email . '，登录密码为：' . $pass . '，感谢您的支持。 ';
