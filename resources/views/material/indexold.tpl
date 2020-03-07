@@ -58,9 +58,9 @@
             <nav>
                 <ul>
                     <li><a href="#1">简介</a></li>
-                    {{if $user->is_admin}
+                    {if $user->is_admin}
                     <li><a href="/admin">管理后台</a></li>
-                    {/if}}
+                    {/if}
                     <li><a href="/user">用户中心</a></li>
                     <li><a href="/user/logout">退出登录</a></li>
                 </ul>
