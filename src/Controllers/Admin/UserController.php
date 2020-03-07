@@ -75,6 +75,10 @@ class UserController extends AdminController
         $email = $request->getParam('userEmail');
         $email = trim($email);
         $email = strtolower($email);
+
+        $money   = (int) trim($request->getParam('userMoney'));
+        $shop_id = (int) $request->getParam('userShop');
+
         // not really user input
         //if (!Check::isEmailLegal($email)) {
         //    $res['ret'] = 0;
@@ -112,7 +116,7 @@ class UserController extends AdminController
         $user->invite_num           = $_ENV['inviteNum'];
         $user->auto_reset_day       = $_ENV['reg_auto_reset_day'];
         $user->auto_reset_bandwidth = $_ENV['reg_auto_reset_bandwidth'];
-        $user->money                = 0;
+        $user->money                = ($money != -1 ? $money : 0);
         $user->class_expire         = date('Y-m-d H:i:s', time() + $_ENV['user_class_expire_default'] * 3600);
         $user->class                = $_ENV['user_class_default'];
         $user->node_connector       = $_ENV['user_conn'];
@@ -136,6 +140,20 @@ class UserController extends AdminController
             $res['ret']         = 1;
             $res['msg']         = '新用户注册成功 用户名: ' . $email . ' 随机初始密码: ' . $pass;
             $res['email_error'] = 'success';
+            $shop = Shop::find($shop_id);
+            if ($shop != null) {
+                $bought           = new Bought();
+                $bought->userid   = $user->id;
+                $bought->shopid   = $shop->id;
+                $bought->datetime = time();
+                $bought->renew    = 0;
+                $bought->coupon   = '';
+                $bought->price    = $shop->price;
+                $bought->save();
+                $shop->buy($user);
+            } else {
+                $res['msg'] .= '<br/>但是套餐添加失败了，原因是套餐不存在';
+            }
             $subject            = $_ENV['appName'] . '-新用户注册通知';
             $to                 = $user->email;
             $text               = '您好，管理员已经为您生成账户，用户名: ' . $email . '，登录密码为：' . $pass . '，感谢您的支持。 ';
