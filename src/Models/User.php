@@ -818,7 +818,7 @@ class User extends Model
     public function addMoney($total)
     {
         $codeq              = new Code();
-        $codeq->code        = '管理员添加';
+        $codeq->code        = ($total > 0 ? '管理员赏赐' : '管理员惩戒');
         $codeq->isused      = 1;
         $codeq->type        = -1;
         $codeq->number      = $total;
