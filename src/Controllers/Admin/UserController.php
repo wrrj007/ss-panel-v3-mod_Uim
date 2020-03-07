@@ -66,7 +66,11 @@ class UserController extends AdminController
         );
         $table_config['default_show_column'] = array('op', 'id', 'user_name', 'remark', 'email');
         $table_config['ajax_url'] = 'user/ajax';
-        return $this->view()->assign('table_config', $table_config)->display('admin/user/index.tpl');
+        $shops = Shop::where('status', 1)->orderBy('name')->get();
+        return $this->view()
+            ->assign('shops', $shops)
+            ->assign('table_config', $table_config)
+            ->display('admin/user/index.tpl');
     }
 
     public function createNewUser($request, $response, $args)
