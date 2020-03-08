@@ -407,7 +407,7 @@ table tr td:first-child {
                                                     </p>
 													<p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="{$item['tutorial_url']}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}{$item['tutorial_url']}{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
                                                     {if isset($item['description'])}
 													<p>
@@ -459,7 +459,7 @@ table tr td:first-child {
                                                     </p>
 													<p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Windows/Shadowsocks"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Windows/Shadowsocks{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -475,7 +475,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Windows/ShadowsocksD"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Windows/ShadowsocksD{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -493,7 +493,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Windows/ShadowsocksR"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Windows/ShadowsocksR{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -510,7 +510,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Windows/SSTap"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Windows/SSTap{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -527,7 +527,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Windows/V2RayN"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Windows/V2RayN{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -545,7 +545,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Windows/Clash-for-Windows"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Windows/Clash-for-Windows{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -561,7 +561,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Windows/Clash-for-Windows"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Windows/Clash-for-Windows{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -582,7 +582,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/macOS/Surge"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/macOS/Surge{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -604,7 +604,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/macOS/ClashX"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/macOS/ClashX{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -620,7 +620,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/macOS/ClashX"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/macOS/ClashX{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -636,7 +636,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/macOS/V2RayU"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/macOS/V2RayU{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -650,7 +650,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/macOS/ShadowsocksX-NG"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/macOS/ShadowsocksX-NG{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -664,7 +664,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/macOS/ShadowsocksX-NG-R8"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/macOS/ShadowsocksX-NG-R8{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -701,7 +701,7 @@ table tr td:first-child {
                                                     </p>
 													<p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/iOS/Surge"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/iOS/Surge{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         相关说明：
@@ -727,7 +727,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/iOS/Kitsunebi"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/iOS/Kitsunebi{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -744,7 +744,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/iOS/Quantumult_sub"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/iOS/Quantumult_sub{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -769,7 +769,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/iOS/QuantumultX"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/iOS/QuantumultX{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -786,7 +786,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/iOS/Shadowrocket"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/iOS/Shadowrocket{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -818,7 +818,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Android/Shadowsocks-Android"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Android/Shadowsocks-Android{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -838,7 +838,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Android/ShadowsocksD"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Android/ShadowsocksD{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -856,7 +856,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Android/ShadowsocksR"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Android/ShadowsocksR{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -872,7 +872,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Android/V2RayNG"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Android/V2RayNG{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -887,7 +887,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Android/Surfboard"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Android/Surfboard{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -904,7 +904,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Android/Kitsunebi"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Android/Kitsunebi{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -925,7 +925,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Linux/ElectronSSR"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Linux/ElectronSSR{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：
@@ -946,7 +946,7 @@ table tr td:first-child {
                                                     </p>
                                                     <p>
                                                         使用教程：
-                                                        <a class="btn-dl" href="/doc/#/Router/Koolshare"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
+                                                        <a class="btn-dl" href="{if $config['use_this_doc'] === false}/user/tutorial{else}/doc/#/Router/Koolshare{/if}"><i class="material-icons icon-sm">turned_in_not</i> 点击查看</a>
                                                     </p>
 													<p>
                                                         使用方式：

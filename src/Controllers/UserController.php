@@ -1785,10 +1785,11 @@ class UserController extends BaseController
                 $return .= '悟空别闹！';
                 break;
         }
-        $newResponse = $response->withHeader('Content-type', ' application/octet-stream; charset=utf-8')->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate')->withHeader('Content-Disposition', ' attachment; filename=node.txt');
-        $newResponse->write($return);
+        $response = $response->withHeader('Content-type', ' application/octet-stream; charset=utf-8')
+            ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate')
+            ->withHeader('Content-Disposition', ' attachment; filename=node.txt');
 
-        return $newResponse;
+        return $response->write($return);
     }
 
     /**
