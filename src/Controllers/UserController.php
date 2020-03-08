@@ -1791,15 +1791,23 @@ class UserController extends BaseController
         return $newResponse;
     }
 
+    /**
+     * 订阅记录
+     *
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     */
     public function subscribe_log($request, $response, $args)
     {
+        if ($_ENV['subscribeLog_show'] === false) {
+            return $response->withStatus(302)->withHeader('Location', '/user');
+        }
         $pageNum = $request->getQueryParams()['page'] ?? 1;
         $logs = UserSubscribeLog::orderBy('id', 'desc')->where('user_id', $this->user->id)->paginate(15, ['*'], 'page', $pageNum);
-        $logs->setPath('/user/subscribe_log');
-
         $iplocation = new QQWry();
 
-        return $this->view()->assign('logs', $logs)->assign('iplocation', $iplocation)->display('user/subscribe_log.tpl');
+        return $this->view()->assign('logs', $logs)->assign('iplocation', $iplocation)->fetch('user/subscribe_log.tpl');
     }
 
     /**
@@ -1860,6 +1868,13 @@ class UserController extends BaseController
         return $newResponse;
     }
 
+    /**
+     * 从使用同数据库的其他面板下载客户端[内置节点]
+     *
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     */
     public function getClientfromToken($request, $response, $args)
     {
         $token = $args['token'];
