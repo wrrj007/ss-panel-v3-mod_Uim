@@ -277,20 +277,20 @@ $_ENV['telegram_general_terms']             = '服务条款.';                  
 
 //沟通设置--------------------------------------------------------------------------------------------
 #客服系统设置，注册地址 https://www.mylivechat.com
-$_ENV['enable_mylivechat'] = false;   //是否开启客服系统
-$_ENV['mylivechat_id']     = '';      //客服系统ID
+$_ENV['enable_mylivechat']    = false;   //是否开启客服系统
+$_ENV['mylivechat_id']        = '';      //客服系统ID
 
 # PushBear  基于微信模板的向关注了二维码的用户以微信方式推送消息 https://pushbear.ftqq.com/，目前仅用户推送新公告
-$_ENV['usePushBear']      = false;
-$_ENV['PushBear_sendkey'] = '';       //请填写您在PushBear获取的sendkey，请仔细检查勿粘贴错
+$_ENV['usePushBear']          = false;
+$_ENV['PushBear_sendkey']     = '';       //请填写您在PushBear获取的sendkey，请仔细检查勿粘贴错
 
 #工单系统设置
-$_ENV['enable_ticket'] = true;        //是否开启工单系统
-$_ENV['mail_ticket']   = true;        //是否开启工单邮件提醒
+$_ENV['enable_ticket']        = true;        //是否开启工单系统
+$_ENV['mail_ticket']          = true;        //是否开启工单邮件提醒
 
 # Server酱  用户提交新工单或者回复工单时用微信提醒机场主 http://sc.ftqq.com/
-$_ENV['useScFtqq']    = false;        //是否开启工单Server酱提醒
-$_ENV['ScFtqq_SCKEY'] = '';           //请填写您在Server酱获取的SCKEY  请仔细检查勿粘贴错
+$_ENV['useScFtqq']            = false;        //是否开启工单Server酱提醒
+$_ENV['ScFtqq_SCKEY']         = '';           //请填写您在Server酱获取的SCKEY  请仔细检查勿粘贴错
 
 #管理员联系方式设置
 $_ENV['enable_admin_contact'] = false;                  //是否开启管理员联系方式
@@ -300,13 +300,13 @@ $_ENV['admin_contact3']       = '微信～123456';         //没有格式要求�
 
 
 //验证码设置------------------------------------------------------------------------------------------
-$_ENV['captcha_provider'] = 'recaptcha';        //取值 recaptcha | geetest(极验)
+$_ENV['captcha_provider']       = 'recaptcha';        //取值 recaptcha | geetest(极验)
 
-$_ENV['recaptcha_sitekey'] = '';
-$_ENV['recaptcha_secret']  = '';
+$_ENV['recaptcha_sitekey']      = '';
+$_ENV['recaptcha_secret']       = '';
 
-$_ENV['geetest_id']  = '';
-$_ENV['geetest_key'] = '';
+$_ENV['geetest_id']             = '';
+$_ENV['geetest_key']            = '';
 
 $_ENV['enable_reg_captcha']     = false;        //启用注册验证码
 $_ENV['enable_login_captcha']   = false;        //启用登录验证码
@@ -315,16 +315,16 @@ $_ENV['enable_checkin_captcha'] = false;        //启用签到验证码
 
 //支付系统设置----------------------------------------------------------------------------------------
 #取值 none | codepay | f2fpay | chenAlipay | paymentwall | spay |tomatopay | payjs | yftpay
-$_ENV['payment_system'] = 'none';
+$_ENV['payment_system']       = 'none';
 
 #yft支付设置
-$_ENV['yft_secret']    = '';
-$_ENV['yft_accesskey'] = '';
+$_ENV['yft_secret']           = '';
+$_ENV['yft_accesskey']        = '';
 
 #codepay码支付
 #wiki地址:https://goo.gl/dRwRDi  http://t.cn/RnsWjtB
-$_ENV['codepay_id']  = '';          //码支付ID
-$_ENV['codepay_key'] = '';          //码支付通信密钥
+$_ENV['codepay_id']           = '';          //码支付ID
+$_ENV['codepay_key']          = '';          //码支付通信密钥
 
 #alipay,f2fpay
 $_ENV['f2fpay_app_id']        = '';
@@ -334,74 +334,74 @@ $_ENV['merchant_private_key'] = '';
 $_ENV['f2fNotifyUrl']         = null;           //自定义当面付回调地址
 
 #PaymentWall
-$_ENV['pmw_publickey']  = '';
-$_ENV['pmw_privatekey'] = '';
-$_ENV['pmw_widget']     = 'm2_1';
-$_ENV['pmw_height']     = '350px';
+$_ENV['pmw_publickey']        = '';
+$_ENV['pmw_privatekey']       = '';
+$_ENV['pmw_widget']           = 'm2_1';
+$_ENV['pmw_height']           = '350px';
 
 #alipay,spay
-$_ENV['alipay_id']  = '';
-$_ENV['alipay_key'] = '';
-$_ENV['amount']     = [2, 23, 233, 2333, 23333];        //充值金额选项设定
+$_ENV['alipay_id']            = '';
+$_ENV['alipay_key']           = '';
+$_ENV['amount']               = [2, 23, 233, 2333, 23333];        //充值金额选项设定
 
 #alipay,zfbjk.com
-$_ENV['zfbjk_pid']       = '';
-$_ENV['zfbjk_key']       = '';
-$_ENV['zfbjk_qrcodeurl'] = '';
+$_ENV['zfbjk_pid']            = '';
+$_ENV['zfbjk_key']            = '';
+$_ENV['zfbjk_qrcodeurl']      = '';
 
 # BitPay 数字货币支付（USDT、比特币、以太坊、EOS等） 商户后台获取授权码 https://merchants.mugglepay.com/
 #   注册即可使用USDT收款，无需任何费用
 #   客服和技术 24x7 在线支持： https://t.me/joinchat/GLKSKhUnE4GvEAPgqtChAQ
-$_ENV['bitpay_secret'] = '';
+$_ENV['bitpay_secret']        = '';
 
 #PayJs
-$_ENV['payjs_mchid'] = '';
-$_ENV['payjs_key']   = '';
+$_ENV['payjs_mchid']          = '';
+$_ENV['payjs_key']            = '';
 
 #tomatopay番茄云支付
 #使用教程:https://swapidc.fanqieui.com/?t/329.html  tg群 https://t.me/fanqiepay
 $_ENV['tomatopay'] = [
     'wxpay'  => [
-        'mchid'   => '',    // 商户号
-        'account' => '',    //您在番茄云支付的登录邮箱
-        'token'   => ''     // 安全验证码
+        'mchid'               => '',    // 商户号
+        'account'             => '',    //您在番茄云支付的登录邮箱
+        'token'               => ''     // 安全验证码
     ],
     'alipay' => [
-        'mchid'   => '',    // 商户号
-        'account' => '',    //您在番茄云支付的登录邮箱
-        'token'   => ''     // 安全验证码
+        'mchid'               => '',    // 商户号
+        'account'             => '',    //您在番茄云支付的登录邮箱
+        'token'               => ''     // 安全验证码
     ],
 ];
 
 
 //其他面板显示设置------------------------------------------------------------------------------------------
-$_ENV['old_index_DESC']   = '<p>够了，我无法忍受你的行为，现在你将成为我们中的一员</p>';	    //旧版本首页的文字讯息
+$_ENV['old_index_DESC']       = '<p>够了，我无法忍受你的行为，现在你将成为我们中的一员</p>';	    //旧版本首页的文字讯息
 
 #用户文档
-$_ENV['use_this_doc']     = false;	    //使用此文档
-$_ENV['enable_documents'] = false;	    //是否允许未登陆用户查看文档中心
-$_ENV['documents_name']   = $_ENV['appName'] . ' 文档中心';	    //文档中心名称
-$_ENV['remote_documents'] = true;	    //是否从远程加载文档中心，否的话请执行 php xcat initdocuments
-$_ENV['documents_source'] = 'https://raw.githubusercontent.com/GeekQu/PANEL_DOC/master/GeekQu';	    //远程文档加载地址
+$_ENV['use_this_doc']         = false;	    //使用此文档
+$_ENV['enable_documents']     = false;	    //是否允许未登陆用户查看文档中心
+$_ENV['documents_name']       = $_ENV['appName'] . ' 文档中心';	    //文档中心名称
+$_ENV['remote_documents']     = true;	    //是否从远程加载文档中心，否的话请执行 php xcat initdocuments
+$_ENV['documents_source']     = 'https://raw.githubusercontent.com/GeekQu/PANEL_DOC/master/GeekQu';	    //远程文档加载地址
 
 #后台商品列表 销量统计
-$_ENV['sales_period'] = 30;             //统计指定周期内的销量，值为【expire/任意大于0的整数】
+$_ENV['sales_period']         = 30;             //统计指定周期内的销量，值为【expire/任意大于0的整数】
 
 #国旗
-$_ENV['enable_flag'] = true;            //启用该项之前务必先仔细阅读教程
-$_ENV['flag_regex']  = '/.*?(?=\s)/';   //从站点全名中匹配【国家/地区】的正则表达式(php版)
+$_ENV['enable_flag']          = true;            //启用该项之前务必先仔细阅读教程
+$_ENV['flag_regex']           = '/.*?(?=\s)/';   //从站点全名中匹配【国家/地区】的正则表达式(php版)
 
 #捐赠
-$_ENV['enable_donate'] = true;          //是否显示用户捐赠（所有收入将被公开）
+$_ENV['enable_donate']        = true;          //是否显示用户捐赠（所有收入将被公开）
 
 #iOS账户显示
-$_ENV['display_ios_class'] = -1;        //至少等级为多少的用户可以看见，小于0时关闭此功能
-$_ENV['display_ios_topup'] = 0;         //满足等级要求后，累计充值高于多少的用户可以看见
-$_ENV['ios_account']       = '';        //iOS账户
-$_ENV['ios_password']      = '';        //iOS密码
+$_ENV['display_ios_class']    = -1;        //至少等级为多少的用户可以看见，小于0时关闭此功能
+$_ENV['display_ios_topup']    = 0;         //满足等级要求后，累计充值高于多少的用户可以看见
+$_ENV['ios_account']          = '';        //iOS账户
+$_ENV['ios_password']         = '';        //iOS密码
 
 #用户中心首页添加其他客户端的支持，可配合 subconverter 等 Api
-$_ENV['userCenterClient'] = [
+$_ENV['userCenterClient']     = [
     'iOS'     => [
         [
             'name'           => 'Loon',
@@ -481,11 +481,11 @@ $_ENV['newIndex'] = true;	//使用新的 Node.js 开发的首页请填写 true�
 
 //节点检测-----------------------------------------------------------------------------------------------
 #GFW检测，请通过crontab进行【开启/关闭】
-$_ENV['detect_gfw_interval'] = 3600;                                                //检测间隔，单位：秒，低于推荐值会爆炸
-$_ENV['detect_gfw_port']     = 22;                                                  //所有节点服务器都打开的TCP端口，常用的为22（SSH端口）
-$_ENV['detect_gfw_url']      = 'https://cn-qz-tcping.torch.njs.app/{ip}/{port}';    //检测节点是否被gfw墙了的API的URL
-$_ENV['detect_gfw_judge']    = '$json_tcping[\'status\']=="true"';                  //判断是否被墙的依据，json_tcping为上方URL返回的json数组
-$_ENV['detect_gfw_count']    = '3';                                                 //尝试次数
+$_ENV['detect_gfw_interval']             = 3600;                                                //检测间隔，单位：秒，低于推荐值会爆炸
+$_ENV['detect_gfw_port']                 = 22;                                                  //所有节点服务器都打开的TCP端口，常用的为22（SSH端口）
+$_ENV['detect_gfw_url']                  = 'https://cn-qz-tcping.torch.njs.app/{ip}/{port}';    //检测节点是否被gfw墙了的API的URL
+$_ENV['detect_gfw_judge']                = '$json_tcping[\'status\']=="true"';                  //判断是否被墙的依据，json_tcping为上方URL返回的json数组
+$_ENV['detect_gfw_count']                = '3';                                                 //尝试次数
 
 #离线检测
 $_ENV['enable_detect_offline']           = true;
@@ -502,61 +502,61 @@ $_ENV['v2ray_level']    = 0;
 
 //以下所有均为高级设置（一般用不上，不用改---------------------------------------------------------------------
 #杂项
-$_ENV['authDriver']    = 'cookie';            //不能更改此项
-$_ENV['pwdMethod']     = 'md5';               //密码加密 可选 md5, sha256, bcrypt, argon2i, argon2id（argon2i需要至少php7.2）
-$_ENV['salt']          = '';                  //推荐配合 md5/sha256， bcrypt/argon2i/argon2id 会忽略此项
-$_ENV['sessionDriver'] = 'cookie';            //可选: cookie,redis
-$_ENV['cacheDriver']   = 'cookie';            //可选: cookie,redis
-$_ENV['tokenDriver']   = 'db';                //可选: db,redis
+$_ENV['authDriver']             = 'cookie';            //不能更改此项
+$_ENV['pwdMethod']              = 'md5';               //密码加密 可选 md5, sha256, bcrypt, argon2i, argon2id（argon2i需要至少php7.2）
+$_ENV['salt']                   = '';                  //推荐配合 md5/sha256， bcrypt/argon2i/argon2id 会忽略此项
+$_ENV['sessionDriver']          = 'cookie';            //可选: cookie,redis
+$_ENV['cacheDriver']            = 'cookie';            //可选: cookie,redis
+$_ENV['tokenDriver']            = 'db';                //可选: db,redis
 
-$_ENV['enable_login_bind_ip'] = true;        //是否将登陆线程和IP绑定
-$_ENV['rememberMeDuration']   = 7;           //登录时记住账号时长天数
-$_ENV['Speedtest_duration']   = 6;           //显示多长时间的测速记录
+$_ENV['enable_login_bind_ip']   = true;        //是否将登陆线程和IP绑定
+$_ENV['rememberMeDuration']     = 7;           //登录时记住账号时长天数
+$_ENV['Speedtest_duration']     = 6;           //显示多长时间的测速记录
 
-$_ENV['login_warn'] = true;                  //异地登陆提示
-$_ENV['timeZone']   = 'PRC';                 //PRC 天朝时间  UTC 格林时间
-$_ENV['theme']      = 'material';            //默认主题
-$_ENV['jump_delay'] = 1200;                  //跳转延时，单位ms，不建议太长
+$_ENV['login_warn']             = true;                  //异地登陆提示
+$_ENV['timeZone']               = 'PRC';                 //PRC 天朝时间  UTC 格林时间
+$_ENV['theme']                  = 'material';            //默认主题
+$_ENV['jump_delay']             = 1200;                  //跳转延时，单位ms，不建议太长
 
-$_ENV['pacp_offset']  = -20000;              //VPN 端口偏移
-$_ENV['pacpp_offset'] = -20000;
+$_ENV['pacp_offset']            = -20000;              //VPN 端口偏移
+$_ENV['pacpp_offset']           = -20000;
 
-$_ENV['checkNodeIp'] = true;                 //是否webapi验证节点ip
-$_ENV['muKeyList']   = [];                   //多 key 列表
+$_ENV['checkNodeIp']            = true;                 //是否webapi验证节点ip
+$_ENV['muKeyList']              = [];                   //多 key 列表
 
-$_ENV['money_from_admin'] = false;            //是否开启管理员修改用户余额时创建充值记录
+$_ENV['money_from_admin']       = false;            //是否开启管理员修改用户余额时创建充值记录
 
 #aws
-$_ENV['aws_access_key_id']     = '';
-$_ENV['aws_secret_access_key'] = '';
+$_ENV['aws_access_key_id']      = '';
+$_ENV['aws_secret_access_key']  = '';
 
 #redis
-$_ENV['redis_scheme']   = 'tcp';
-$_ENV['redis_host']     = '127.0.0.1';
-$_ENV['redis_port']     = 6379;
-$_ENV['redis_database'] = '';
-$_ENV['redis_password'] = '';
+$_ENV['redis_scheme']           = 'tcp';
+$_ENV['redis_host']             = '127.0.0.1';
+$_ENV['redis_port']             = 6379;
+$_ENV['redis_database']         = '';
+$_ENV['redis_password']         = '';
 
 #Radius设置
-$_ENV['enable_radius']      = false;            //是否开启Radius
-$_ENV['radius_db_host']     = '';               //以下4项为Radius数据库设置
-$_ENV['radius_db_database'] = '';
-$_ENV['radius_db_user']     = '';
-$_ENV['radius_db_password'] = '';
-$_ENV['radius_secret']      = '';               //Radius连接密钥
+$_ENV['enable_radius']          = false;            //是否开启Radius
+$_ENV['radius_db_host']         = '';               //以下4项为Radius数据库设置
+$_ENV['radius_db_database']     = '';
+$_ENV['radius_db_user']         = '';
+$_ENV['radius_db_password']     = '';
+$_ENV['radius_secret']          = '';               //Radius连接密钥
 
 #Cloudflare
-$_ENV['cloudflare_enable'] = false;         //是否开启 Cloudflare 解析
-$_ENV['cloudflare_email']  = '';            //Cloudflare 邮箱地址
-$_ENV['cloudflare_key']    = '';            //Cloudflare API Key
-$_ENV['cloudflare_name']   = '';            //域名
+$_ENV['cloudflare_enable']      = false;         //是否开启 Cloudflare 解析
+$_ENV['cloudflare_email']       = '';            //Cloudflare 邮箱地址
+$_ENV['cloudflare_key']         = '';            //Cloudflare API Key
+$_ENV['cloudflare_name']        = '';            //域名
 
 #不安全中转模式，这个开启之后使用除了 auth_aes128_md5 或者 auth_aes128_sha1 以外的协议地用户也可以设置和使用中转
-$_ENV['relay_insecure_mode'] = false;       //强烈推荐不开启
+$_ENV['relay_insecure_mode']    = false;       //强烈推荐不开启
 
 #是否夹带统计代码，自己在 resources/views/{主题名} 下创建一个 analytics.tpl ，如果有必要就用 literal 界定符
-$_ENV['enable_analytics_code'] = true;
-$_ENV['sspanelAnalysis']       = true;
+$_ENV['enable_analytics_code']  = true;
+$_ENV['sspanelAnalysis']        = true;
 
 #在套了CDN之后获取用户真实ip，如果您不知道这是什么，请不要乱动
 $_ENV['cdn_forwarded_ip'] = array('HTTP_X_FORWARDED_FOR', 'HTTP_ALI_CDN_REAL_IP', 'X-Real-IP', 'True-Client-Ip');
