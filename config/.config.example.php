@@ -441,7 +441,37 @@ $_ENV['userCenterClient'] = [
     'Linux'   => [],
     'Router'  => [],
     'Android' => [],
-    'Windows' => []
+    'Windows' => [
+        [
+            'name'           => 'Netch',
+            'support'        => 'SS/SSR/VMess',
+            'download_urls'  => [
+                [
+                    'name' => '官方下载',
+                    'url'  => 'https://github.com/NetchX/Netch/releases',
+                ]
+            ],
+            'tutorial_url'   => '/doc/#/Windows/Netch',
+            'description'    => '其他说明.',
+            'subscribe_urls' => [
+                [
+                    'name' => 'SS 订阅',
+                    'type' => 'href',
+                    'url'  => '%userUrl%?sub=2',
+                ],
+                [
+                    'name' => 'SSR 订阅',
+                    'type' => 'href',
+                    'url'  => '%userUrl%?sub=1',
+                ],
+                [
+                    'name' => 'V2Ray 订阅',
+                    'type' => 'copy',
+                    'url'  => '%userUrl%?sub=3',
+                ]
+            ]
+        ]
+    ]
 ];
 
 
